@@ -7,7 +7,7 @@ permissions:
   contents: write
 
 jobs:
-  dependabot:
+  dependabot-auto-merge:
     runs-on: ubuntu-latest
     if: ${{ github.actor == 'dependabot[bot]' }}
     env:
