@@ -54,7 +54,7 @@ jobs:
         if: ${{ inputs.mypy-system-dependencies }}
         run: |
           sudo apt-get -y update
-          sudo apt-get -y install --no-install-recommends
+          sudo apt-get -y install --no-install-recommends ${{ inputs.mypy-system-dependencies }}
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
