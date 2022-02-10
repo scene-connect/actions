@@ -2,6 +2,9 @@ name: Python linting
 on:
   workflow_call:
     inputs:
+      mypy-dot-env:
+        required: false
+        type: string
       mypy-system-dependencies:
         required: false
         type: string
@@ -63,7 +66,8 @@ jobs:
       - name: Install Pipenv
         run: pip install pipenv
       - name: Set up environment
-        run: cp .env.example .env
+        if: ${{ inputs.mypy-dot-env }}
+        run: cp ${{ inputs.mypy-dot-env }} .env
       - name: Load mypy cache
         id: mypy-cache
         uses: actions/cache@v2
