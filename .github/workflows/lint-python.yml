@@ -2,6 +2,27 @@ name: Python linting
 on:
   workflow_call:
     inputs:
+      black:
+        default: true
+        description: Run black
+        required: false
+        type: boolean
+      flake8:
+        default: true
+        description: Run flake8
+        required: false
+        type: boolean
+      isort:
+        default: true
+        description: Run isort
+        required: false
+        type: boolean
+      mypy:
+        default: true
+        description: Run mypy
+        required: false
+        type: boolean
+
       mypy-dot-env:
         required: false
         type: string
@@ -25,12 +46,14 @@ on:
 
 jobs:
   black:
+    if: inputs.black
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - uses: psf/black@stable
 
   flake8:
+    if: inputs.flake8
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -45,6 +68,7 @@ jobs:
           run: python -m flake8
 
   isort:
+    if: inputs.isort
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -81,6 +105,7 @@ jobs:
           run: pipenv run python -m isort --check-only --diff .
 
   mypy:
+    if: inputs.mypy
     runs-on: ubuntu-latest
     steps:
       - name: Install system dependencies
