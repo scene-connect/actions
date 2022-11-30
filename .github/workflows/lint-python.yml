@@ -1,6 +1,10 @@
 name: Python linting
 on:
   workflow_call:
+    secrets:
+      PIPENV_SSH_KEH:
+        description: SSH key to use when installing with pipenv for private dependencies.
+        required: false
     inputs:
       black:
         default: true
@@ -79,6 +83,13 @@ jobs:
       # Make sure there is some version of isort in case it's not a listed dependency.
       - name: Install isort
         run: pip install isort
+      - name: Set pipenv SSH key from secrets
+        env:
+          PIPENV_SSH_KEH: ${{ secrets.PIPENV_SSH_KEH }}
+        if: inputs.package-manager == 'pipenv' && ${{ env.PIPENV_SSH_KEH != '' }}
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.PIPENV_SSH_KEH }}
       - name: Install pipenv requirements
         if: inputs.package-manager == 'pipenv'
         run: pip install pipenv && pipenv install --dev
@@ -124,6 +135,13 @@ jobs:
       # Make sure there is some version of mypy in case it's not a listed dependency.
       - name: Install mypy
         run: pip install mypy
+      - name: Set pipenv SSH key from secrets
+        env:
+          PIPENV_SSH_KEH: ${{ secrets.PIPENV_SSH_KEH }}
+        if: inputs.package-manager == 'pipenv' && ${{ env.PIPENV_SSH_KEH != '' }}
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.PIPENV_SSH_KEH }}
       - name: Install pipenv requirements
         if: inputs.package-manager == 'pipenv'
         run: pip install pipenv && pipenv install --dev
