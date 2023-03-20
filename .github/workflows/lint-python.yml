@@ -11,6 +11,11 @@ on:
         description: Run black
         required: false
         type: boolean
+      django-upgrade:
+        default: true
+        description: Run django-upgrade
+        required: false
+        type: boolean
       flake8:
         default: true
         description: Run flake8
@@ -26,7 +31,21 @@ on:
         description: Run mypy
         required: false
         type: boolean
+      pyupgrade:
+        default: true
+        description: Run pyupgrade
+        required: false
+        type: boolean
+      reorder-python-imports:
+        default: true
+        description: Run reorder-python-imports
+        required: false
+        type: boolean
 
+      django-version:
+        default: "4.2"
+        required: false
+        type: string
       mypy-dot-env:
         required: false
         type: string
@@ -39,7 +58,7 @@ on:
         required: false
         type: string
       python-version:
-        default: "3.10"
+        default: "3.11"
         required: false
         type: string
       requirements-files:
@@ -55,6 +74,18 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - uses: psf/black@stable
+
+  django-upgrade:
+    if: inputs.django-upgrade
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        python-version: ${{ inputs.python-version }}
+      - name: Install django-upgrade
+        run: pip install django-upgrade
+      - name: Run django-upgrade
+        run: git ls-files -- '*.py' | xargs django-upgrade --target-version {{ inputs.django-version }}
 
   flake8:
     if: inputs.flake8
@@ -166,3 +197,29 @@ jobs:
         with:
           linters: mypy
           run: pipenv run python -m mypy --show-column-numbers
+
+  pyupgrade:
+    if: inputs.pyupgrade
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ inputs.python-version }}
+      - name: Install pyupgrade
+        run: pip install pyupgrade
+      - name: Run pyupgrade
+        run: git ls-files -- '*.py' | xargs pyupgrade --py`td -d {{ inputs.python-version }}}-plus`
+
+  reorder-python-imports:
+    if: inputs.reorder-python-imports
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ inputs.python-version }}
+      - name: Install reorder-python-imports
+        run: pip install reorder-python-imports
+      - name: Run reorder-python-imports
+        run: git ls-files -- '*.py' | xargs reorder-python-imports --py`td -d {{ inputs.python-version }}}-plus`
