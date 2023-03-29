@@ -236,16 +236,10 @@ jobs:
         run: pip install -r ${{ inputs.requirements-files }}
       - name: Run pyright (pip)
         if: inputs.package-manager == 'pip'
-        uses: liskin/gh-problem-matcher-wrap@v1
-        with:
-          linters: pyright
-          run: python -m pyright
+        run: python -m pyright
       - name: Run pyright (pipenv)
         if: inputs.package-manager == 'pipenv'
-        uses: liskin/gh-problem-matcher-wrap@v1
-        with:
-          linters: pyright
-          run: pipenv run python -m pyright
+        run: pipenv run python -m pyright
 
   pyupgrade:
     if: inputs.pyupgrade
