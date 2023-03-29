@@ -31,6 +31,11 @@ on:
         description: Run mypy
         required: false
         type: boolean
+      pyright:
+        default: false
+        description: Run pyright
+        required: false
+        type: boolean
       pyupgrade:
         default: true
         description: Run pyupgrade
@@ -198,6 +203,49 @@ jobs:
         with:
           linters: mypy
           run: pipenv run python -m mypy --show-column-numbers
+
+  pyright:
+    if: inputs.pyright
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install system dependencies
+        if: ${{ inputs.mypy-system-dependencies }}
+        run: |
+          sudo apt-get -y update
+          sudo apt-get -y install --no-install-recommends ${{ inputs.mypy-system-dependencies }}
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          cache: ${{ inputs.package-manager }}
+          python-version: ${{ inputs.python-version }}
+      # Make sure there is some version of pyright in case it's not a listed dependency.
+      - name: Install pyright
+        run: pip install pyright
+      - name: Set pipenv SSH key from secrets
+        env:
+          DEPENDENCY_SSH_KEY: ${{ secrets.DEPENDENCY_SSH_KEY }}
+        if: ${{ env.DEPENDENCY_SSH_KEY != null }}
+        uses: webfactory/ssh-agent@v0.5.4
+        with:
+          ssh-private-key: ${{ secrets.DEPENDENCY_SSH_KEY }}
+      - name: Install pipenv requirements
+        if: inputs.package-manager == 'pipenv'
+        run: pip install pipenv && pipenv install --dev
+      - name: Install pip requirements
+        if: inputs.package-manager == 'pip'
+        run: pip install -r ${{ inputs.requirements-files }}
+      - name: Run pyright (pip)
+        if: inputs.package-manager == 'pip'
+        uses: liskin/gh-problem-matcher-wrap@v1
+        with:
+          linters: pyright
+          run: python -m pyright
+      - name: Run pyright (pipenv)
+        if: inputs.package-manager == 'pipenv'
+        uses: liskin/gh-problem-matcher-wrap@v1
+        with:
+          linters: pyright
+          run: pipenv run python -m pyright
 
   pyupgrade:
     if: inputs.pyupgrade
