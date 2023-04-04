@@ -275,7 +275,7 @@ jobs:
         run: git ls-files -- '*.py' | xargs reorder-python-imports --py`echo ${{ inputs.python-version }} | tr -d .`-plus
 
   ruff:
-    if: inputs.ruffi
+    if: inputs.ruff
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
