@@ -219,8 +219,8 @@ jobs:
           sudo apt-get -y update
           sudo apt-get -y install --no-install-recommends ${{ inputs.mypy-system-dependencies }}
       - uses: actions/checkout@v3
-      - name: Ensure virtualenv is not created in the project
-        run: rm -rf .venv
+      - name: Ensure virtualenv is empty (if present)
+        run: rm -rf .venv/*
       - uses: actions/setup-python@v4
         with:
           cache: ${{ inputs.package-manager }}
