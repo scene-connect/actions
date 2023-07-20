@@ -60,7 +60,7 @@ on:
         type: string
       package-manager:
         default: pipenv
-        description: Package manager to use (pip or pipenv)
+        description: Package manager to use (pip, pipenv or poetry)
         required: false
         type: string
       python-version:
@@ -124,7 +124,6 @@ jobs:
       - name: Install dependencies
         uses: scene-connect/actions/install-dependencies@install-dependencies
         with:
-          activate: true
           package_manager: ${{ inputs.package-manager }}
           python-version: ${{ inputs.python-version }}
           requirements-files: ${{ inputs.requirements-files }}
@@ -139,7 +138,6 @@ jobs:
       - name: Install dependencies
         uses: scene-connect/actions/install-dependencies@install-dependencies
         with:
-          activate: true
           package_manager: ${{ inputs.package-manager }}
           python-version: ${{ inputs.python-version }}
           requirements-files: ${{ inputs.requirements-files }}
@@ -169,7 +167,6 @@ jobs:
       - name: Install dependencies
         uses: scene-connect/actions/install-dependencies@install-dependencies
         with:
-          activate: true
           package_manager: ${{ inputs.package-manager }}
           python-version: ${{ inputs.python-version }}
           requirements-files: ${{ inputs.requirements-files }}
@@ -178,7 +175,10 @@ jobs:
       - name: Install pyright
         run: pip install pyright
       - name: Run pyright
-        run: python -m pyright
+        uses: scene-connect/actions/run-in-managed-venv@install-dependencies
+        with:
+          run: pyright
+          package_manager: ${{ inputs.package-manager }}
 
   pyupgrade:
     if: inputs.pyupgrade

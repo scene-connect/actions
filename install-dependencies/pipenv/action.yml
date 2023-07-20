@@ -1,9 +1,5 @@
 name: Install pipenv dependencies
 inputs:
-  activate:
-    default: false
-    required: false
-    type: bool
   python-version:
     default: "3.11"
     required: false
@@ -36,8 +32,4 @@ runs:
       shell: bash
     - name: Install pipenv dependencies
       run: python -m pipenv install --dev --deploy
-      shell: bash
-    - name: Activate virtual environment
-      if: inputs.activate
-      run: pipenv shell
       shell: bash

@@ -1,9 +1,5 @@
 name: Install poetry dependencies
 inputs:
-  activate:
-    default: false
-    required: false
-    type: bool
   python-version:
     default: "3.11"
     required: false
@@ -28,6 +24,9 @@ runs:
       with:
         cache: "poetry"
         python-version: "3.11"
+    - name: Install poetry
+      run: pipx install poetry
+      shell: bash
     - uses: snok/install-poetry@v1
       with:
         virtualenvs-in-project: true
@@ -40,8 +39,4 @@ runs:
     - name: Install poetry dependencies
       if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
       run: poetry install --no-interaction --dev --no-root
-      shell: bash
-    - name: Activate virtual environment
-      if: inputs.activate
-      run: poetry shell
       shell: bash
