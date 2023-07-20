@@ -1,0 +1,43 @@
+name: Install pipenv dependencies
+inputs:
+  activate:
+    default: false
+    required: false
+    type: bool
+  python-version:
+    default: "3.11"
+    required: false
+    type: string
+  requirements-files:
+    default: requirements.txt
+    description: Space-separated list of requirements files if using pip
+    required: false
+    type: string
+  system-dependencies:
+    required: false
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - uses: scene-connect/actions/install-dependencies/system-dependencies@install-dependencies
+      with:
+        system-dependencies: ${{ inputs.system-dependencies }}
+    - uses: actions/checkout@v3
+    - name: Ensure virtualenv is not created in the project
+      run: rm -rf .venv
+      shell: bash
+    - uses: actions/setup-python@v4
+      with:
+        cache: "pipenv"
+        python-version: "3.11"
+    - name: Install pipenv
+      run: pip install pipenv
+      shell: bash
+    - name: Install pipenv dependencies
+      run: python -m pipenv install --dev --deploy
+      shell: bash
+    - name: Activate virtual environment
+      if: inputs.activate
+      run: pipenv shell
+      shell: bash

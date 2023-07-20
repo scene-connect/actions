@@ -1,0 +1,47 @@
+name: Install poetry dependencies
+inputs:
+  activate:
+    default: false
+    required: false
+    type: bool
+  python-version:
+    default: "3.11"
+    required: false
+    type: string
+  requirements-files:
+    default: requirements.txt
+    description: Space-separated list of requirements files if using pip
+    required: false
+    type: string
+  system-dependencies:
+    required: false
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - uses: scene-connect/actions/install-dependencies/system-dependencies@install-dependencies
+      with:
+        system-dependencies: ${{ inputs.system-dependencies }}
+    - uses: actions/checkout@v3
+    - uses: actions/setup-python@v4
+      with:
+        cache: "poetry"
+        python-version: "3.11"
+    - uses: snok/install-poetry@v1
+      with:
+        virtualenvs-in-project: true
+    - name: Load cached venv
+      id: cached-poetry-dependencies
+      uses: actions/cache@v3
+      with:
+        path: .venv
+        key: venv-${{ runner.os }}-${{ steps.setup-python.outputs.python-version }}-${{ hashFiles('**/poetry.lock') }}
+    - name: Install poetry dependencies
+      if: steps.cached-poetry-dependencies.outputs.cache-hit != 'true'
+      run: poetry install --no-interaction --dev --no-root
+      shell: bash
+    - name: Activate virtual environment
+      if: inputs.activate
+      run: poetry shell
+      shell: bash
