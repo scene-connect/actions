@@ -124,7 +124,7 @@ jobs:
       - name: Install dependencies
         uses: scene-connect/actions/install-dependencies@install-dependencies
         with:
-          package_manager: ${{ inputs.package-manager }}
+          package-manager: ${{ inputs.package-manager }}
           python-version: ${{ inputs.python-version }}
           requirements-files: ${{ inputs.requirements-files }}
           system-dependencies: ${{ inputs.system-dependencies }}
@@ -138,7 +138,7 @@ jobs:
       - name: Install dependencies
         uses: scene-connect/actions/install-dependencies@install-dependencies
         with:
-          package_manager: ${{ inputs.package-manager }}
+          package-manager: ${{ inputs.package-manager }}
           python-version: ${{ inputs.python-version }}
           requirements-files: ${{ inputs.requirements-files }}
           system-dependencies: ${{ inputs.system-dependencies }}
@@ -167,7 +167,7 @@ jobs:
       - name: Install dependencies
         uses: scene-connect/actions/install-dependencies@install-dependencies
         with:
-          package_manager: ${{ inputs.package-manager }}
+          package-manager: ${{ inputs.package-manager }}
           python-version: ${{ inputs.python-version }}
           requirements-files: ${{ inputs.requirements-files }}
           system-dependencies: ${{ inputs.system-dependencies }}
@@ -175,10 +175,8 @@ jobs:
       - name: Install pyright
         run: pip install pyright
       - name: Run pyright
-        uses: scene-connect/actions/run-in-managed-venv@install-dependencies
-        with:
-          run: pyright
-          package_manager: ${{ inputs.package-manager }}
+        run: python -m pyright
+        shell: bash
 
   pyupgrade:
     if: inputs.pyupgrade

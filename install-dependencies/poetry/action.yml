@@ -20,13 +20,13 @@ runs:
       with:
         system-dependencies: ${{ inputs.system-dependencies }}
     - uses: actions/checkout@v3
+    - name: Install poetry
+      run: pipx install poetry
+      shell: bash
     - uses: actions/setup-python@v4
       with:
         cache: "poetry"
         python-version: "3.11"
-    - name: Install poetry
-      run: pipx install poetry
-      shell: bash
     - uses: snok/install-poetry@v1
       with:
         virtualenvs-in-project: true

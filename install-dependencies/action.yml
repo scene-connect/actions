@@ -21,18 +21,18 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Install pipenv requirements
-      if: inputs.package-manager == 'pipenv'
-      uses: scene-connect/actions/install-dependencies/pipenv@install-dependencies
-      with:
-        python-version: ${{ inputs.python-version }}
-        system-dependencies: ${{ inputs.system-dependencies }}
     - name: Install pip requirements
       if: inputs.package-manager == 'pip'
       uses: scene-connect/actions/install-dependencies/pip@install-dependencies
       with:
         python-version: ${{ inputs.python-version }}
         requirements-files: ${{ inputs.requirements-files }}
+        system-dependencies: ${{ inputs.system-dependencies }}
+    - name: Install pipenv requirements
+      if: inputs.package-manager == 'pipenv'
+      uses: scene-connect/actions/install-dependencies/pipenv@install-dependencies
+      with:
+        python-version: ${{ inputs.python-version }}
         system-dependencies: ${{ inputs.system-dependencies }}
     - name: Install poetry requirements
       if: inputs.package-manager == 'poetry'
