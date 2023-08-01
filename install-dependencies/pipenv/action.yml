@@ -1,8 +1,5 @@
 name: Install pipenv dependencies
 inputs:
-  google-artifact-registry:
-    required:
-    type: bool
   python-version:
     default: "3.11"
     required: false
@@ -20,7 +17,7 @@ runs:
   using: "composite"
   steps:
     - uses: scene-connect/actions/install-dependencies/system-dependencies@install-dependencies
-      if: ${{ inputs.system-dependencies }}
+      if: inputs.system-dependencies
       with:
         system-dependencies: ${{ inputs.system-dependencies }}
     - uses: actions/checkout@v3
@@ -34,14 +31,8 @@ runs:
     - name: Install pipenv
       run: pip install pipenv
       shell: bash
-    - name: Authenticate with Google Cloud
-      if: ${{ inputs.google-artifact-registry }}
-      # Sets GOOGLE_APPLICATION_CREDENTIALS env var with credentials file.
-      uses: google-github-actions/auth@v1
-      with:
-        credentials_json: ${{ secrets.GCP_SA_KEY }}
-    - name: Prepare Google Cloud keyring
-      if: ${{ inputs.google-artifact-registry }}
+    - name: Prepare Google Artifact Registry keyring
+      if: env.GOOGLE_APPLICATION_CREDENTIALS
       # Install build dependencies (keyring for authenticating to our GCP Artifact Registry python packages).
       run: pipenv run install-build-dependencies
       shell: bash
