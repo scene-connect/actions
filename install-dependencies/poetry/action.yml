@@ -19,7 +19,6 @@ runs:
     - uses: scene-connect/actions/install-dependencies/system-dependencies@install-dependencies
       with:
         system-dependencies: ${{ inputs.system-dependencies }}
-    - uses: actions/checkout@v3
     - name: Install poetry
       run: pipx install poetry
       shell: bash
