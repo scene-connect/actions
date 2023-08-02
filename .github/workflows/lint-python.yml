@@ -78,17 +78,12 @@ jobs:
     if: inputs.black
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
       - uses: psf/black@stable
 
   django-upgrade:
     if: inputs.django-upgrade
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: ${{ inputs.python-version }}
       - name: Install django-upgrade
         run: pip install django-upgrade
       - name: Run django-upgrade
@@ -98,10 +93,6 @@ jobs:
     if: inputs.flake8
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: ${{ inputs.python-version }}
       - run: python -m pip install flake8
       - name: Run flake8
         uses: liskin/gh-problem-matcher-wrap@v1
@@ -113,12 +104,6 @@ jobs:
     if: inputs.isort
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          cache: ${{ inputs.package-manager }}
-          python-version: ${{ inputs.python-version }}
-      # Make sure there is some version of isort in case it's not a listed dependency.
       - name: Install isort
         run: pip install isort
       - name: Install dependencies
@@ -182,10 +167,6 @@ jobs:
     if: inputs.pyupgrade
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: ${{ inputs.python-version }}
       - name: Install pyupgrade
         run: pip install pyupgrade
       - name: Run pyupgrade
@@ -195,10 +176,6 @@ jobs:
     if: inputs.reorder-python-imports
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          python-version: ${{ inputs.python-version }}
       - name: Install reorder-python-imports
         run: pip install reorder-python-imports
       - name: Run reorder-python-imports
@@ -208,5 +185,4 @@ jobs:
     if: inputs.ruff
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
       - uses: chartboost/ruff-action@v1
