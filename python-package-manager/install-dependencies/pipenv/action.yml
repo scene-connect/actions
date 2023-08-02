@@ -16,7 +16,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - uses: scene-connect/actions/install-dependencies/system-dependencies@install-dependencies
+    - uses: scene-connect/actions/install-system-dependencies@install-dependencies
       if: inputs.system-dependencies
       with:
         system-dependencies: ${{ inputs.system-dependencies }}
@@ -37,12 +37,4 @@ runs:
       shell: bash
     - name: Install pipenv dependencies
       run: pipenv install --dev --deploy
-      shell: bash
-    - name: Activate virtualenv
-      run: |
-        . `pipenv --venv`/bin/activate
-        echo PATH=$PATH >> $GITHUB_ENV
-      shell: bash
-    - name: DEBUG
-      run: which python
       shell: bash

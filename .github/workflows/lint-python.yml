@@ -123,16 +123,22 @@ jobs:
         with:
           credentials_json: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
       - name: Install dependencies
-        uses: scene-connect/actions/install-dependencies@install-dependencies
+        uses: scene-connect/actions/python-package-manager/install-dependencies@install-dependencies
         with:
           package-manager: ${{ inputs.package-manager }}
           python-version: ${{ inputs.python-version }}
           requirements-files: ${{ inputs.requirements-files }}
           system-dependencies: ${{ inputs.system-dependencies }}
       - name: Install isort
-        run: pip install isort
+        uses: scene-connect/actions/python-package-manager/run-command@install-dependencies
+        with:
+          command: pip install isort
+          package-manager: ${{ inputs.package-manager }}
       - name: Run isort
-        run: python -m isort --check-only --diff .
+        uses: scene-connect/actions/python-package-manager/run-command@install-dependencies
+        with:
+          command: python -m isort --check-only --diff .
+          package-manager: ${{ inputs.package-manager }}
 
   mypy:
     if: inputs.mypy
@@ -144,7 +150,7 @@ jobs:
         with:
           credentials_json: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
       - name: Install dependencies
-        uses: scene-connect/actions/install-dependencies@install-dependencies
+        uses: scene-connect/actions/python-package-manager/install-dependencies@install-dependencies
         with:
           package-manager: ${{ inputs.package-manager }}
           python-version: ${{ inputs.python-version }}
@@ -154,7 +160,10 @@ jobs:
         if: ${{ inputs.mypy-dot-env }}
         run: cp ${{ inputs.mypy-dot-env }} .env
       - name: Install mypy
-        run: pip install mypy
+        uses: scene-connect/actions/python-package-manager/run-command@install-dependencies
+        with:
+          command: pip install mypy
+          package-manager: ${{ inputs.package-manager }}
       - name: Load mypy cache
         id: mypy-cache
         uses: actions/cache@v2
@@ -166,6 +175,7 @@ jobs:
         with:
           linters: mypy
           run: python -m mypy --show-column-numbers
+          # TODO run in venv... somehow?
 
   pyright:
     if: inputs.pyright
@@ -177,21 +187,22 @@ jobs:
         with:
           credentials_json: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
       - name: Install dependencies
-        uses: scene-connect/actions/install-dependencies@install-dependencies
+        uses: scene-connect/actions/python-package-manager/install-dependencies@install-dependencies
         with:
           package-manager: ${{ inputs.package-manager }}
           python-version: ${{ inputs.python-version }}
           requirements-files: ${{ inputs.requirements-files }}
           system-dependencies: ${{ inputs.system-dependencies }}
-      - name: DEBUG
-        run: |
-          which python
-          which pip
-        shell: bash
       - name: Install pyright
-        run: pip install pyright
+        uses: scene-connect/actions/python-package-manager/run-command@install-dependencies
+        with:
+          command: pip install pyright
+          package-manager: ${{ inputs.package-manager }}
       - name: Run pyright
-        run: python -m pyright
+        uses: scene-connect/actions/python-package-manager/run-command@install-dependencies
+        with:
+          command: python -m pyright
+          package-manager: ${{ inputs.package-manager }}
 
   pyupgrade:
     if: inputs.pyupgrade

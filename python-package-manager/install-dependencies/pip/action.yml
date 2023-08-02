@@ -16,7 +16,7 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - uses: scene-connect/actions/install-dependencies/system-dependencies@install-dependencies
+    - uses: scene-connect/actions/install-system-dependencies@install-dependencies
       with:
         system-dependencies: ${{ inputs.system-dependencies }}
     - uses: actions/setup-python@v4

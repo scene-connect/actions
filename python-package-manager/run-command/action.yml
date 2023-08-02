@@ -1,12 +1,8 @@
-name: Run in managed venv
+name: Run command in a managed venv
 inputs:
-  run:
+  command:
     required: true
     description: The command to run inside the virtual environment.
-    type: string
-  python-version:
-    default: "3.11"
-    required: false
     type: string
   package-manager:
     default: pipenv
@@ -18,8 +14,11 @@ runs:
   using: "composite"
   steps:
     - if: inputs.package-manager == 'pip'
-      run: python -m ${{ run }}
+      run: python -m ${{ inputs.command }}
+      shell: bash
     - if: inputs.package-manager == 'pipenv'
-      run: pipenv run ${{ run }}
+      run: pipenv run ${{ inputs.command }}
+      shell: bash
     - if: inputs.package-manager == 'poetry'
-      run: poetry run ${{ run }}
+      run: poetry run ${{ inputs.command }}
+      shell: bash
