@@ -35,9 +35,6 @@ runs:
       # Install build dependencies (keyring for authenticating to our GCP Artifact Registry python packages).
       run: pipenv run install-build-dependencies
       shell: bash
-    - name: DEBUG
-      run: gcloud config config-helper
-      shell: bash
     - name: Install pipenv dependencies
       run: pipenv install --dev --deploy
       shell: bash
