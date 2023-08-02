@@ -183,6 +183,11 @@ jobs:
           python-version: ${{ inputs.python-version }}
           requirements-files: ${{ inputs.requirements-files }}
           system-dependencies: ${{ inputs.system-dependencies }}
+      - name: DEBUG
+        run: |
+          which python
+          which pip
+        shell: bash
       - name: Install pyright
         run: pip install pyright
       - name: Run pyright

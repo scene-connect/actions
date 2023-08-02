@@ -43,3 +43,6 @@ runs:
         . `pipenv --venv`/bin/activate
         echo PATH=$PATH >> $GITHUB_ENV
       shell: bash
+    - name: DEBUG
+      run: which python
+      shell: bash
