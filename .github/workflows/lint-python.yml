@@ -119,7 +119,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Authenticate with Google Cloud
-        if: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
+        if: secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
@@ -141,7 +141,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Authenticate with Google Cloud
-        if: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
+        if: secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
@@ -175,7 +175,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Authenticate with Google Cloud
-        if: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
+        if: secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
