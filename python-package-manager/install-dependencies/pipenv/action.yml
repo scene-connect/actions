@@ -9,17 +9,10 @@ inputs:
     description: Space-separated list of requirements files if using pip
     required: false
     type: string
-  system-dependencies:
-    required: false
-    type: string
 
 runs:
   using: "composite"
   steps:
-    - uses: scene-connect/actions/install-system-dependencies@install-dependencies
-      if: inputs.system-dependencies
-      with:
-        system-dependencies: ${{ inputs.system-dependencies }}
     - name: Ensure virtualenv is not created in the project
       run: rm -rf .venv
       shell: bash

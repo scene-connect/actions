@@ -9,16 +9,10 @@ inputs:
     description: Space-separated list of requirements files if using pip
     required: false
     type: string
-  system-dependencies:
-    required: false
-    type: string
 
 runs:
   using: "composite"
   steps:
-    - uses: scene-connect/actions/install-system-dependencies@install-dependencies
-      with:
-        system-dependencies: ${{ inputs.system-dependencies }}
     - uses: actions/setup-python@v4
       with:
         cache: "pip"

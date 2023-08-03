@@ -1,13 +1,12 @@
 name: Install system dependencies
 inputs:
   system-dependencies:
-    required: false
+    required: true
     type: string
 
 runs:
   using: "composite"
   steps:
-    - if: ${{ inputs.system-dependencies }}
-      uses: awalsh128/cache-apt-pkgs-action@v1
+    - uses: awalsh128/cache-apt-pkgs-action@v1
       with:
         packages: ${{ inputs.system-dependencies }}
