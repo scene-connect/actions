@@ -23,6 +23,11 @@ runs:
       with:
         cache: "poetry"
         python-version: "3.11"
+    - name: Prepare Google Artifact Registry keyring
+      if: env.GOOGLE_APPLICATION_CREDENTIALS
+      # Install build dependencies (keyring for authenticating to our GCP Artifact Registry python packages).
+      run: poetry run install-build-dependencies
+      shell: bash
     - name: Install poetry dependencies
       run: poetry install --no-interaction --no-root
       shell: bash
