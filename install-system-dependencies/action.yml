@@ -10,3 +10,4 @@ runs:
     - uses: awalsh128/cache-apt-pkgs-action@v1
       with:
         packages: ${{ inputs.system-dependencies }}
+        execute_install_scripts: true
