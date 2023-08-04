@@ -75,6 +75,7 @@ on:
 
     secrets:
       GOOGLE_AUTHENTICATION_CREDENTIALS_JSON:
+        description: "Google Cloud Platform service-agent JSON credentials for accessing our Artifact Repository and installing private packages."
         required: false
 
 jobs:
@@ -119,7 +120,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Authenticate with Google Cloud
-        if: secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON
+        env:
+          GOOGLE_AUTHENTICATION_CREDENTIALS_JSON: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
+        if: ${{ env.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON != '' }}
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
@@ -147,7 +150,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Authenticate with Google Cloud
-        if: secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON
+        env:
+          GOOGLE_AUTHENTICATION_CREDENTIALS_JSON: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
+        if: ${{ env.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON != '' }}
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
@@ -185,7 +190,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Authenticate with Google Cloud
-        if: secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON
+        env:
+          GOOGLE_AUTHENTICATION_CREDENTIALS_JSON: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
+        if: ${{ env.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON != '' }}
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
