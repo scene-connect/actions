@@ -76,7 +76,6 @@ on:
     secrets:
       GOOGLE_AUTHENTICATION_CREDENTIALS_JSON:
         required: false
-        default: ""
 
 jobs:
   black:
