@@ -1,12 +1,12 @@
 name: Install dependencies
 inputs:
-  python-version:
-    default: "3.11"
-    required: false
-    type: string
   package-manager:
     default: pipenv
     description: Package manager to use (pip, pipenv or poetry)
+    required: false
+    type: string
+  python-version:
+    default: "3.11"
     required: false
     type: string
   requirements-files:
@@ -17,6 +17,11 @@ inputs:
   system-dependencies:
     required: false
     type: string
+  use-private-repo:
+    default: false
+    description: Use the ZUoS private GCloud Artifact Registry (required GCloud authentication)
+    required: false
+    type: boolean
 
 runs:
   using: "composite"
@@ -32,13 +37,16 @@ runs:
       with:
         python-version: ${{ inputs.python-version }}
         requirements-files: ${{ inputs.requirements-files }}
+        use-private-repo: inputs.use-private-repo
     - name: Install pipenv requirements
       if: inputs.package-manager == 'pipenv'
       uses: scene-connect/actions/python-package-manager/install-dependencies/pipenv@install-dependencies
       with:
         python-version: ${{ inputs.python-version }}
+        use-private-repo: inputs.use-private-repo
     - name: Install poetry requirements
       if: inputs.package-manager == 'poetry'
       uses: scene-connect/actions/python-package-manager/install-dependencies/poetry@install-dependencies
       with:
         python-version: ${{ inputs.python-version }}
+        use-private-repo: inputs.use-private-repo

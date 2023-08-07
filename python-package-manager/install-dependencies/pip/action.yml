@@ -9,6 +9,11 @@ inputs:
     description: Space-separated list of requirements files if using pip
     required: false
     type: string
+  use-private-repo:
+    default: false
+    description: Use the ZUoS private GCloud Artifact Registry (required GCloud authentication)
+    required: false
+    type: boolean
 
 runs:
   using: "composite"
@@ -18,9 +23,9 @@ runs:
         cache: "pip"
         python-version: "3.11"
     - name: Prepare Google Artifact Registry keyring
-      if: env.GOOGLE_APPLICATION_CREDENTIALS
-      # Install build dependencies (keyring for authenticating to our GCP Artifact Registry python packages).
-      run: pip install -r requirements-build-dependencies.txt
+      if: inputs.use-private-repo
+      # Install dependencies for accessing our private packages repo (keyring for authenticating to GCP Artifact Registry).
+      run: pip install -r requirements-gcloud-keyring.txt
       shell: bash
     - name: Install dependencies
       run: python -m pip install -r ${{ inputs.requirements-files }}
