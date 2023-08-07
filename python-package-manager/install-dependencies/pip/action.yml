@@ -23,7 +23,7 @@ runs:
         cache: "pip"
         python-version: "3.11"
     - name: Prepare Google Artifact Registry keyring
-      if: inputs.use-private-repo
+      if: inputs.use-private-repo == 'true'
       # Install dependencies for accessing our private packages repo (keyring for authenticating to GCP Artifact Registry).
       run: pip install -r requirements-gcloud-keyring.txt
       shell: bash
