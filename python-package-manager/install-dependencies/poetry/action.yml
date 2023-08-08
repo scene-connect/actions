@@ -29,7 +29,7 @@ runs:
         cache: "poetry"
         python-version: "3.11"
     - name: Prepare Google Artifact Registry keyring
-      if: inputs.use-private-repo == 'true'
+      if: inputs.use-private-repo
       # Install dependencies for accessing our private packages repo (keyring for authenticating to GCP Artifact Registry).
       run: poetry run init-private-repo
       shell: bash
