@@ -9,11 +9,6 @@ inputs:
     description: Space-separated list of requirements files if using pip
     required: false
     type: string
-  use-private-repo:
-    default: false
-    description: Use the ZUoS private GCloud Artifact Registry (required GCloud authentication)
-    required: false
-    type: boolean
 
 runs:
   using: "composite"
@@ -29,9 +24,9 @@ runs:
       run: pip install pipenv
       shell: bash
     - name: Prepare Google Artifact Registry keyring
-      if: inputs.use-private-repo
-      # Install dependencies for accessing our private packages repo (keyring for authenticating to GCP Artifact Registry).
-      run: pipenv run init-private-repo
+      if: env.GOOGLE_APPLICATION_CREDENTIALS
+      # Install build dependencies (keyring for authenticating to our GCP Artifact Registry python packages).
+      run: pipenv run install-build-dependencies
       shell: bash
     - name: Install pipenv dependencies
       run: pipenv install --dev --deploy

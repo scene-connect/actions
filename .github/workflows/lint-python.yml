@@ -72,10 +72,6 @@ on:
         description: Space-separated list of requirements files if using pip
         required: false
         type: string
-      use-private-repo:
-        default: false
-        description: Use the ZUoS private repository (required GCloud authentication)
-        type: boolean
 
     secrets:
       GOOGLE_AUTHENTICATION_CREDENTIALS_JSON:
@@ -124,7 +120,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Authenticate with Google Cloud
-        if: inputs.use-private-repo
+        env:
+          GOOGLE_AUTHENTICATION_CREDENTIALS_JSON: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
+        if: ${{ env.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON != '' }}
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
@@ -135,7 +133,6 @@ jobs:
           python-version: ${{ inputs.python-version }}
           requirements-files: ${{ inputs.requirements-files }}
           system-dependencies: ${{ inputs.system-dependencies }}
-          use-private-repo: ${{ inputs.use-private-repo }}
       - name: Install isort
         uses: scene-connect/actions/python-package-manager/run-command@install-dependencies
         with:
@@ -153,7 +150,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Authenticate with Google Cloud
-        if: inputs.use-private-repo
+        env:
+          GOOGLE_AUTHENTICATION_CREDENTIALS_JSON: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
+        if: ${{ env.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON != '' }}
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
@@ -164,7 +163,6 @@ jobs:
           python-version: ${{ inputs.python-version }}
           requirements-files: ${{ inputs.requirements-files }}
           system-dependencies: ${{ inputs.system-dependencies }}
-          use-private-repo: ${{ inputs.use-private-repo }}
       - name: Set up environment
         if: ${{ inputs.mypy-dot-env }}
         run: cp ${{ inputs.mypy-dot-env }} .env
@@ -192,7 +190,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Authenticate with Google Cloud
-        if: inputs.use-private-repo
+        env:
+          GOOGLE_AUTHENTICATION_CREDENTIALS_JSON: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
+        if: ${{ env.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON != '' }}
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
@@ -203,7 +203,6 @@ jobs:
           python-version: ${{ inputs.python-version }}
           requirements-files: ${{ inputs.requirements-files }}
           system-dependencies: ${{ inputs.system-dependencies }}
-          use-private-repo: ${{ inputs.use-private-repo }}
       - name: Install pyright
         uses: scene-connect/actions/python-package-manager/run-command@install-dependencies
         with:
