@@ -1,0 +1,33 @@
+name: Install pipenv dependencies
+inputs:
+  python-version:
+    default: "3.11"
+    required: false
+    type: string
+  requirements-files:
+    default: requirements.txt
+    description: Space-separated list of requirements files if using pip
+    required: false
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Ensure virtualenv is not created in the project
+      run: rm -rf .venv
+      shell: bash
+    - uses: actions/setup-python@v4
+      with:
+        cache: "pipenv"
+        python-version: "3.11"
+    - name: Install pipenv
+      run: pip install pipenv
+      shell: bash
+    - name: Prepare Google Artifact Registry keyring
+      if: env.GOOGLE_APPLICATION_CREDENTIALS
+      # Install dependencies for accessing our private packages repo (keyring for authenticating to GCP Artifact Registry).
+      run: pipenv run pip install --no-input keyring keyrings-google-artifactregistry-auth
+      shell: bash
+    - name: Install pipenv dependencies
+      run: pipenv install --dev --deploy
+      shell: bash

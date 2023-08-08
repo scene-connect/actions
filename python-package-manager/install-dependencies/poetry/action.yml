@@ -1,0 +1,30 @@
+name: Install poetry dependencies
+inputs:
+  python-version:
+    default: "3.11"
+    required: false
+    type: string
+  requirements-files:
+    default: requirements.txt
+    description: Space-separated list of requirements files if using pip
+    required: false
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install poetry
+      run: pipx install poetry
+      shell: bash
+    - uses: actions/setup-python@v4
+      with:
+        cache: "poetry"
+        python-version: "3.11"
+    - name: Prepare Google Artifact Registry keyring
+      if: env.GOOGLE_APPLICATION_CREDENTIALS
+      # Install dependencies for accessing our private packages repo (keyring for authenticating to GCP Artifact Registry).
+      run: poetry self add "keyrings-google-artifactregistry-auth@latest"
+      shell: bash
+    - name: Install poetry dependencies
+      run: poetry install --no-interaction --no-root
+      shell: bash

@@ -1,0 +1,44 @@
+name: Install dependencies
+inputs:
+  python-version:
+    default: "3.11"
+    required: false
+    type: string
+  package-manager:
+    default: pipenv
+    description: Package manager to use (pip, pipenv or poetry)
+    required: false
+    type: string
+  requirements-files:
+    default: requirements.txt
+    description: Space-separated list of requirements files if using pip
+    required: false
+    type: string
+  system-dependencies:
+    required: false
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: Install system dependencies
+      if: inputs.system-dependencies
+      uses: scene-connect/actions/install-system-dependencies@v2
+      with:
+        system-dependencies: ${{ inputs.system-dependencies }}
+    - name: Install pip requirements
+      if: inputs.package-manager == 'pip'
+      uses: scene-connect/actions/python-package-manager/install-dependencies/pip@v2
+      with:
+        python-version: ${{ inputs.python-version }}
+        requirements-files: ${{ inputs.requirements-files }}
+    - name: Install pipenv requirements
+      if: inputs.package-manager == 'pipenv'
+      uses: scene-connect/actions/python-package-manager/install-dependencies/pipenv@v2
+      with:
+        python-version: ${{ inputs.python-version }}
+    - name: Install poetry requirements
+      if: inputs.package-manager == 'poetry'
+      uses: scene-connect/actions/python-package-manager/install-dependencies/poetry@v2
+      with:
+        python-version: ${{ inputs.python-version }}

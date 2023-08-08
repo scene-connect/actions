@@ -1,0 +1,27 @@
+name: Install pip dependencies
+inputs:
+  python-version:
+    default: "3.11"
+    required: false
+    type: string
+  requirements-files:
+    default: requirements.txt
+    description: Space-separated list of requirements files if using pip
+    required: false
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-python@v4
+      with:
+        cache: "pip"
+        python-version: "3.11"
+    - name: Prepare Google Artifact Registry keyring
+      if: env.GOOGLE_APPLICATION_CREDENTIALS
+      # Install dependencies for accessing our private packages repo (keyring for authenticating to GCP Artifact Registry).
+      run: pip install --no-input keyring keyrings-google-artifactregistry-auth
+      shell: bash
+    - name: Install dependencies
+      run: python -m pip install -r ${{ inputs.requirements-files }}
+      shell: bash

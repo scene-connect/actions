@@ -1,10 +1,6 @@
 name: Python linting
 on:
   workflow_call:
-    secrets:
-      DEPENDENCY_SSH_KEY:
-        description: SSH key to use when installing with pipenv for private dependencies.
-        required: false
     inputs:
       black:
         default: true
@@ -59,12 +55,12 @@ on:
       mypy-dot-env:
         required: false
         type: string
-      mypy-system-dependencies:
+      system-dependencies:
         required: false
         type: string
       package-manager:
         default: pipenv
-        description: Package manager to use (pip or pipenv)
+        description: Package manager to use (pip, pipenv or poetry)
         required: false
         type: string
       python-version:
@@ -76,6 +72,11 @@ on:
         description: Space-separated list of requirements files if using pip
         required: false
         type: string
+
+    secrets:
+      GOOGLE_AUTHENTICATION_CREDENTIALS_JSON:
+        description: "Google Cloud Platform service-agent JSON credentials for accessing our Artifact Repository and installing private packages."
+        required: false
 
 jobs:
   black:
@@ -118,135 +119,100 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
-        with:
-          cache: ${{ inputs.package-manager }}
-          python-version: ${{ inputs.python-version }}
-      # Make sure there is some version of isort in case it's not a listed dependency.
-      - name: Install isort
-        run: pip install isort
-      - name: Set pipenv SSH key from secrets
+      - name: Authenticate with Google Cloud
         env:
-          DEPENDENCY_SSH_KEY: ${{ secrets.DEPENDENCY_SSH_KEY }}
-        if: ${{ env.DEPENDENCY_SSH_KEY != null }}
-        uses: webfactory/ssh-agent@v0.5.4
+          GOOGLE_AUTHENTICATION_CREDENTIALS_JSON: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
+        if: ${{ env.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON != '' }}
+        uses: google-github-actions/auth@v1
         with:
-          ssh-private-key: ${{ secrets.DEPENDENCY_SSH_KEY }}
-      - name: Install pipenv requirements
-        if: inputs.package-manager == 'pipenv'
-        run: pip install pipenv && pipenv install --dev
-      - name: Install pip requirements
-        if: inputs.package-manager == 'pip'
-        run: pip install -r ${{ inputs.requirements-files }}
-      - name: Run isort (pip)
-        if: inputs.package-manager == 'pip'
-        run: python -m isort --check-only --diff .
-      - name: Run isort (pipenv)
-        if: inputs.package-manager == 'pipenv'
-        run: pipenv run isort --check-only --diff .
-      - name: Run isort (pip)
-        if: inputs.package-manager == 'pip'
-        uses: liskin/gh-problem-matcher-wrap@v1
+          credentials_json: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
+      - name: Install dependencies
+        uses: scene-connect/actions/python-package-manager/install-dependencies@v2
         with:
-          linters: isort
-          run: python -m isort --check-only --diff .
-      - name: Run isort (pipenv)
-        if: inputs.package-manager == 'pipenv'
-        uses: liskin/gh-problem-matcher-wrap@v1
+          package-manager: ${{ inputs.package-manager }}
+          python-version: ${{ inputs.python-version }}
+          requirements-files: ${{ inputs.requirements-files }}
+          system-dependencies: ${{ inputs.system-dependencies }}
+      - name: Install isort
+        uses: scene-connect/actions/python-package-manager/run-command@v2
         with:
-          linters: isort
-          run: pipenv run python -m isort --check-only --diff .
+          command: pip install isort
+          package-manager: ${{ inputs.package-manager }}
+      - name: Run isort
+        uses: scene-connect/actions/python-package-manager/run-command@v2
+        with:
+          command: python -m isort --check-only --diff .
+          package-manager: ${{ inputs.package-manager }}
 
   mypy:
     if: inputs.mypy
     runs-on: ubuntu-latest
     steps:
-      - name: Install system dependencies
-        if: ${{ inputs.mypy-system-dependencies }}
-        run: |
-          sudo apt-get -y update
-          sudo apt-get -y install --no-install-recommends ${{ inputs.mypy-system-dependencies }}
       - uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+      - name: Authenticate with Google Cloud
+        env:
+          GOOGLE_AUTHENTICATION_CREDENTIALS_JSON: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
+        if: ${{ env.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON != '' }}
+        uses: google-github-actions/auth@v1
         with:
-          cache: ${{ inputs.package-manager }}
+          credentials_json: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
+      - name: Install dependencies
+        uses: scene-connect/actions/python-package-manager/install-dependencies@v2
+        with:
+          package-manager: ${{ inputs.package-manager }}
           python-version: ${{ inputs.python-version }}
+          requirements-files: ${{ inputs.requirements-files }}
+          system-dependencies: ${{ inputs.system-dependencies }}
       - name: Set up environment
         if: ${{ inputs.mypy-dot-env }}
         run: cp ${{ inputs.mypy-dot-env }} .env
-      # Make sure there is some version of mypy in case it's not a listed dependency.
       - name: Install mypy
-        run: pip install mypy
-      - name: Set pipenv SSH key from secrets
-        env:
-          DEPENDENCY_SSH_KEY: ${{ secrets.DEPENDENCY_SSH_KEY }}
-        if: ${{ env.DEPENDENCY_SSH_KEY != null }}
-        uses: webfactory/ssh-agent@v0.5.4
+        uses: scene-connect/actions/python-package-manager/run-command@v2
         with:
-          ssh-private-key: ${{ secrets.DEPENDENCY_SSH_KEY }}
-      - name: Install pipenv requirements
-        if: inputs.package-manager == 'pipenv'
-        run: pip install pipenv && pipenv install --dev
-      - name: Install pip requirements
-        if: inputs.package-manager == 'pip'
-        run: pip install -r ${{ inputs.requirements-files }}
+          command: pip install mypy
+          package-manager: ${{ inputs.package-manager }}
       - name: Load mypy cache
         id: mypy-cache
         uses: actions/cache@v2
         with:
           path: .mypy_cache
           key: mypy-${{ runner.os }}
-      - name: Run mypy (pip)
-        if: inputs.package-manager == 'pip'
+      - name: Run mypy
         uses: liskin/gh-problem-matcher-wrap@v1
         with:
           linters: mypy
           run: python -m mypy --show-column-numbers
-      - name: Run mypy (pipenv)
-        if: inputs.package-manager == 'pipenv'
-        uses: liskin/gh-problem-matcher-wrap@v1
-        with:
-          linters: mypy
-          run: pipenv run python -m mypy --show-column-numbers
+          # TODO run in venv... somehow?
 
   pyright:
     if: inputs.pyright
     runs-on: ubuntu-latest
     steps:
-      - name: Install system dependencies
-        if: ${{ inputs.mypy-system-dependencies }}
-        run: |
-          sudo apt-get -y update
-          sudo apt-get -y install --no-install-recommends ${{ inputs.mypy-system-dependencies }}
       - uses: actions/checkout@v3
-      - name: Ensure virtualenv is not created in the project
-        run: rm -rf .venv
-      - uses: actions/setup-python@v4
-        with:
-          cache: ${{ inputs.package-manager }}
-          python-version: ${{ inputs.python-version }}
-      # Make sure there is some version of pyright in case it's not a listed dependency.
-      - name: Install pyright
-        run: pip install pyright
-      - name: Set pipenv SSH key from secrets
+      - name: Authenticate with Google Cloud
         env:
-          DEPENDENCY_SSH_KEY: ${{ secrets.DEPENDENCY_SSH_KEY }}
-        if: ${{ env.DEPENDENCY_SSH_KEY != null }}
-        uses: webfactory/ssh-agent@v0.5.4
+          GOOGLE_AUTHENTICATION_CREDENTIALS_JSON: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
+        if: ${{ env.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON != '' }}
+        uses: google-github-actions/auth@v1
         with:
-          ssh-private-key: ${{ secrets.DEPENDENCY_SSH_KEY }}
-      - name: Install pipenv requirements
-        if: inputs.package-manager == 'pipenv'
-        run: pip install pipenv && pipenv install --dev
-      - name: Install pip requirements
-        if: inputs.package-manager == 'pip'
-        run: pip install -r ${{ inputs.requirements-files }}
-      - name: Run pyright (pip)
-        if: inputs.package-manager == 'pip'
-        run: python -m pyright
-      - name: Run pyright (pipenv)
-        if: inputs.package-manager == 'pipenv'
-        run: pipenv run python -m pyright
+          credentials_json: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
+      - name: Install dependencies
+        uses: scene-connect/actions/python-package-manager/install-dependencies@v2
+        with:
+          package-manager: ${{ inputs.package-manager }}
+          python-version: ${{ inputs.python-version }}
+          requirements-files: ${{ inputs.requirements-files }}
+          system-dependencies: ${{ inputs.system-dependencies }}
+      - name: Install pyright
+        uses: scene-connect/actions/python-package-manager/run-command@v2
+        with:
+          command: pip install pyright
+          package-manager: ${{ inputs.package-manager }}
+      - name: Run pyright
+        uses: scene-connect/actions/python-package-manager/run-command@v2
+        with:
+          command: python -m pyright
+          package-manager: ${{ inputs.package-manager }}
 
   pyupgrade:
     if: inputs.pyupgrade

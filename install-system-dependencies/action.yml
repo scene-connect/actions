@@ -1,0 +1,14 @@
+name: Install system dependencies
+inputs:
+  system-dependencies:
+    required: true
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - name: apt-get install
+      run: |
+        sudo apt-get -y update
+        sudo apt-get -y install --no-install-recommends ${{ inputs.system-dependencies }}
+      shell: bash
