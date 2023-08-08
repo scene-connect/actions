@@ -16,9 +16,6 @@ runs:
     - name: Install poetry
       run: pipx install poetry
       shell: bash
-    - name: Ensure virtualenv is not created in the project  # so that setup-python cache will work
-      run: rm -rf .venv
-      shell: bash
     - uses: actions/setup-python@v4
       with:
         cache: "poetry"
