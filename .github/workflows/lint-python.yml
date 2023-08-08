@@ -127,19 +127,19 @@ jobs:
         with:
           credentials_json: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
       - name: Install dependencies
-        uses: scene-connect/actions/python-package-manager/install-dependencies@install-dependencies
+        uses: scene-connect/actions/python-package-manager/install-dependencies@v2
         with:
           package-manager: ${{ inputs.package-manager }}
           python-version: ${{ inputs.python-version }}
           requirements-files: ${{ inputs.requirements-files }}
           system-dependencies: ${{ inputs.system-dependencies }}
       - name: Install isort
-        uses: scene-connect/actions/python-package-manager/run-command@install-dependencies
+        uses: scene-connect/actions/python-package-manager/run-command@v2
         with:
           command: pip install isort
           package-manager: ${{ inputs.package-manager }}
       - name: Run isort
-        uses: scene-connect/actions/python-package-manager/run-command@install-dependencies
+        uses: scene-connect/actions/python-package-manager/run-command@v2
         with:
           command: python -m isort --check-only --diff .
           package-manager: ${{ inputs.package-manager }}
@@ -157,7 +157,7 @@ jobs:
         with:
           credentials_json: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
       - name: Install dependencies
-        uses: scene-connect/actions/python-package-manager/install-dependencies@install-dependencies
+        uses: scene-connect/actions/python-package-manager/install-dependencies@v2
         with:
           package-manager: ${{ inputs.package-manager }}
           python-version: ${{ inputs.python-version }}
@@ -167,7 +167,7 @@ jobs:
         if: ${{ inputs.mypy-dot-env }}
         run: cp ${{ inputs.mypy-dot-env }} .env
       - name: Install mypy
-        uses: scene-connect/actions/python-package-manager/run-command@install-dependencies
+        uses: scene-connect/actions/python-package-manager/run-command@v2
         with:
           command: pip install mypy
           package-manager: ${{ inputs.package-manager }}
@@ -197,19 +197,19 @@ jobs:
         with:
           credentials_json: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
       - name: Install dependencies
-        uses: scene-connect/actions/python-package-manager/install-dependencies@install-dependencies
+        uses: scene-connect/actions/python-package-manager/install-dependencies@v2
         with:
           package-manager: ${{ inputs.package-manager }}
           python-version: ${{ inputs.python-version }}
           requirements-files: ${{ inputs.requirements-files }}
           system-dependencies: ${{ inputs.system-dependencies }}
       - name: Install pyright
-        uses: scene-connect/actions/python-package-manager/run-command@install-dependencies
+        uses: scene-connect/actions/python-package-manager/run-command@v2
         with:
           command: pip install pyright
           package-manager: ${{ inputs.package-manager }}
       - name: Run pyright
-        uses: scene-connect/actions/python-package-manager/run-command@install-dependencies
+        uses: scene-connect/actions/python-package-manager/run-command@v2
         with:
           command: python -m pyright
           package-manager: ${{ inputs.package-manager }}
