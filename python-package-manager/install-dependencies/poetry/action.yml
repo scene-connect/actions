@@ -4,6 +4,10 @@ inputs:
     default: "3.11"
     required: false
     type: string
+  with_root:
+    default: false
+    required: false
+    type: boolean
   requirements-files:
     default: requirements.txt
     description: Space-separated list of requirements files if using pip
@@ -26,5 +30,10 @@ runs:
       run: poetry self add "keyrings-google-artifactregistry-auth@latest"
       shell: bash
     - name: Install poetry dependencies
+      if: inputs.with_root == 'false'
       run: poetry install --all-extras --no-interaction --no-root
+      shell: bash
+    - name: Install poetry dependencies with root
+      if: inputs.with_root == 'true'
+      run: poetry install --all-extras --no-interaction
       shell: bash
