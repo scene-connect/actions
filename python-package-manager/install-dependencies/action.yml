@@ -14,6 +14,11 @@ inputs:
     description: Space-separated list of requirements files if using pip
     required: false
     type: string
+  with_root:
+    default: false
+    description: should the root package be installed (poetry only). Required for src layout and pytest
+    required: false
+    type: boolean
   system-dependencies:
     required: false
     type: string
@@ -41,4 +46,5 @@ runs:
       if: inputs.package-manager == 'poetry'
       uses: scene-connect/actions/python-package-manager/install-dependencies/poetry@v2
       with:
+        with_root: ${{ inputs.with_root }}
         python-version: ${{ inputs.python-version }}
