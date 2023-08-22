@@ -4,11 +4,6 @@ inputs:
     default: "3.11"
     required: false
     type: string
-  requirements-files:
-    default: requirements.txt
-    description: Space-separated list of requirements files if using pip
-    required: false
-    type: string
 
 runs:
   using: "composite"
