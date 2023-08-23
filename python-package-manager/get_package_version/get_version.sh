@@ -7,10 +7,10 @@ then
     if [[ "$INPUT_PACKAGE_MANAGER" == "pipenv" ]]
     then
         cat Pipfile.lock | jq --raw-output '."'"$INPUT_GROUP"'"."'"$INPUT_PACKAGE"'".version' | grep -Po $version_regex
-    elif [ "$INPUT_PACKAGE_MANAGER}" == "poetry" ]
+    elif [ "$INPUT_PACKAGE_MANAGER" == "poetry" ]
     then
         poetry show --with="$INPUT_GROUP" -- "$INPUT_PACKAGE" | grep "version" | grep -o ": .*" | grep -Po $version_regex
-    elif [[ "$INPUT_PACKAGE_MANAGER}" == "pip" ]]
+    elif [[ "$INPUT_PACKAGE_MANAGER" == "pip" ]]
     then
         cat $INPUT_REQUIREMENTS_FILE | grep "$INPUT_PACKAGE" | grep -Po "[=><~]+.*" | grep -Po $version_regex
     else
