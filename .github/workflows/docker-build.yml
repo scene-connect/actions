@@ -40,36 +40,41 @@ jobs:
       DOCKER_BUILDKIT: 1
     steps:
       - uses: actions/checkout@v3
-      - name: Authenticate with Google Cloud
-        uses: google-github-actions/auth@v1
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v2
+      - name: Store google auth secret file
+        run: echo '${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}' |tee /tmp/google_auth_credentials.json
+      - name: Login to Google Artifact Registry docker repo
+        uses: docker/login-action@v2
         with:
-          credentials_json: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
-      - name: Authorize Docker push
-        run: gcloud auth configure-docker europe-north1-docker.pkg.dev
+          registry: europe-north1-docker.pkg.dev
+          username: _json_key
+          password: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
       - name: Build builder image
-        run: >-
-          docker build
-          --build-arg BUILDKIT_INLINE_CACHE=1
-          -f Dockerfile
-          --cache-from ${{ env.full_image_uri }}-builder:latest
-          -t ${{ env.full_image_uri }}-builder:latest
-          --target builder
-          .
+        uses: docker/build-push-action@v4
+        with:
+          build-args: BUILDKIT_INLINE_CACHE=1
+          cache-from: ${{ env.full_image_uri }}-builder:latest
+          context: .
+          file: Dockerfile
+          platforms: linux/amd64
+          push: ${{ inputs.docker-push }}
+          tags: ${{ env.full_image_uri }}-builder:latest
+          target: builder
+          secret-files: |
+            "google_application_credentials.json=/tmp/google_auth_credentials.json"
       - name: Build runtime image
-        run: >-
-          docker build
-          --build-arg BUILDKIT_INLINE_CACHE=1
-          -f Dockerfile
-          --cache-from ${{ env.full_image_uri }}:latest
-          -t ${{ env.full_image_uri }}:latest
-          -t ${{ env.full_image_uri }}:${{ github.sha }}
-          .
-      - name: Push builder image to Artifact Registry
-        if: ${{ inputs.docker-push }}
-        run: docker push --all-tags ${{ env.full_image_uri }}-builder
-      - name: Push runtime image to Artifact Registry
-        if: ${{ inputs.docker-push }}
-        run: docker push --all-tags ${{ env.full_image_uri }}
+        uses: docker/build-push-action@v4
+        with:
+          build-args: BUILDKIT_INLINE_CACHE=1
+          cache-from: ${{ env.full_image_uri }}:latest
+          context: .
+          file: Dockerfile
+          platforms: linux/amd64
+          push: ${{ inputs.docker-push }}
+          tags: ${{ env.full_image_uri }}:latest
+          secret-files: |
+            "google_application_credentials.json=/tmp/google_auth_credentials.json"
 
   kubernetes_deploy:
     runs-on: ubuntu-latest
