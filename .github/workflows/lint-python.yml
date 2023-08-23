@@ -86,6 +86,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
+          # Don't need our dependency packages cache here, we're just installing one linter tool.
           python-version: ${{ inputs.python-version }}
       - id: get_version
         uses: ./python-package-manager/get_package_version
@@ -106,6 +107,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
+          # Don't need our dependency packages cache here, we're just installing one linter tool.
           python-version: ${{ inputs.python-version }}
       # Always use the latest version of django-upgrade, the point is to prepare for upgrades.
       - run: pip install django-upgrade
@@ -119,6 +121,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
+          # Don't need our dependency packages cache here, we're just installation one linter tool.
           python-version: ${{ inputs.python-version }}
       - id: get_version
         uses: ./python-package-manager/get_package_version
@@ -231,6 +234,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
+          # Don't need our dependency packages cache here, we're just installing one linter tool.
           python-version: ${{ inputs.python-version }}
       # Always use the latest version of pyupgrade, the point is to prepare for upgrades.
       - run: pip install pyupgrade
@@ -244,6 +248,7 @@ jobs:
       - uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
+          # Don't need our dependency packages cache here, we're just installing one linter tool.
           python-version: ${{ inputs.python-version }}
       - id: get_version
         uses: ./python-package-manager/get_package_version
