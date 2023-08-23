@@ -89,7 +89,7 @@ jobs:
           # Don't need our dependency packages cache here, we're just installing one linter tool.
           python-version: ${{ inputs.python-version }}
       - id: get_version
-        uses: scene-connect/actions/python-package-manager/get_package_version@use-project-linter-versions
+        uses: scene-connect/actions/python-package-manager/get_package_version@v2
         with:
           package: black
           group: develop
@@ -124,7 +124,7 @@ jobs:
           # Don't need our dependency packages cache here, we're just installation one linter tool.
           python-version: ${{ inputs.python-version }}
       - id: get_version
-        uses: scene-connect/actions/python-package-manager/get_package_version@use-project-linter-versions
+        uses: scene-connect/actions/python-package-manager/get_package_version@v2
         with:
           package: flake8
           group: develop
@@ -251,7 +251,7 @@ jobs:
           # Don't need our dependency packages cache here, we're just installing one linter tool.
           python-version: ${{ inputs.python-version }}
       - id: get_version
-        uses: scene-connect/actions/python-package-manager/get_package_version@use-project-linter-versions
+        uses: scene-connect/actions/python-package-manager/get_package_version@v2
         with:
           package: reorder-python-imports
           group: develop
@@ -268,7 +268,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - id: get_version
-        uses: scene-connect/actions/python-package-manager/get_package_version@use-project-linter-versions
+        uses: scene-connect/actions/python-package-manager/get_package_version@v2
         with:
           package: ruff
           group: develop
