@@ -28,23 +28,23 @@ runs:
   steps:
     - name: Install system dependencies
       if: inputs.system-dependencies
-      uses: scene-connect/actions/install-system-dependencies@v2
+      uses: ./install-system-dependencies
       with:
         system-dependencies: ${{ inputs.system-dependencies }}
     - name: Install pip requirements
       if: inputs.package-manager == 'pip'
-      uses: scene-connect/actions/python-package-manager/install-dependencies/pip@v2
+      uses: ./python-package-manager/install-dependencies/pip
       with:
         python-version: ${{ inputs.python-version }}
         requirements-files: ${{ inputs.requirements-files }}
     - name: Install pipenv requirements
       if: inputs.package-manager == 'pipenv'
-      uses: scene-connect/actions/python-package-manager/install-dependencies/pipenv@v2
+      uses: ./python-package-manager/install-dependencies/pipenv
       with:
         python-version: ${{ inputs.python-version }}
     - name: Install poetry requirements
       if: inputs.package-manager == 'poetry'
-      uses: scene-connect/actions/python-package-manager/install-dependencies/poetry@v2
+      uses: ./python-package-manager/install-dependencies/poetry
       with:
         with_root: ${{ inputs.with_root }}
         python-version: ${{ inputs.python-version }}

@@ -88,7 +88,7 @@ jobs:
         with:
           python-version: ${{ inputs.python-version }}
       - id: get_version
-        uses: scene-connect/actions/python-package-manager/get_package_version@use-project-linter-versions
+        uses: ./python-package-manager/get_package_version
         with:
           package: black
           group: develop
@@ -121,7 +121,7 @@ jobs:
         with:
           python-version: ${{ inputs.python-version }}
       - id: get_version
-        uses: scene-connect/actions/python-package-manager/get_package_version@use-project-linter-versions
+        uses: ./python-package-manager/get_package_version
         with:
           package: flake8
           group: develop
@@ -148,14 +148,14 @@ jobs:
         with:
           credentials_json: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
       - name: Install dependencies
-        uses: scene-connect/actions/python-package-manager/install-dependencies@v2
+        uses: ./python-package-manager/install-dependencies
         with:
           package-manager: ${{ inputs.package-manager }}
           python-version: ${{ inputs.python-version }}
           requirements-files: ${{ inputs.requirements-files }}
           system-dependencies: ${{ inputs.system-dependencies }}
       - name: Run isort
-        uses: scene-connect/actions/python-package-manager/run-command@v2
+        uses: ./python-package-manager/run-command
         with:
           command: python -m isort --check-only --diff .
           package-manager: ${{ inputs.package-manager }}
@@ -173,7 +173,7 @@ jobs:
         with:
           credentials_json: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
       - name: Install dependencies
-        uses: scene-connect/actions/python-package-manager/install-dependencies@v2
+        uses: ./python-package-manager/install-dependencies
         with:
           package-manager: ${{ inputs.package-manager }}
           python-version: ${{ inputs.python-version }}
@@ -194,7 +194,7 @@ jobs:
           linters: mypy
           action: add
       - name: Run mypy
-        uses: scene-connect/actions/python-package-manager/run-command@v2
+        uses: ./python-package-manager/run-command
         with:
           command: python -m mypy --show-column-numbers
           package-manager: ${{ inputs.package-manager }}
@@ -212,14 +212,14 @@ jobs:
         with:
           credentials_json: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
       - name: Install dependencies
-        uses: scene-connect/actions/python-package-manager/install-dependencies@v2
+        uses: ./python-package-manager/install-dependencies
         with:
           package-manager: ${{ inputs.package-manager }}
           python-version: ${{ inputs.python-version }}
           requirements-files: ${{ inputs.requirements-files }}
           system-dependencies: ${{ inputs.system-dependencies }}
       - name: Run pyright
-        uses: scene-connect/actions/python-package-manager/run-command@v2
+        uses: ./python-package-manager/run-command
         with:
           command: python -m pyright
           package-manager: ${{ inputs.package-manager }}
@@ -246,7 +246,7 @@ jobs:
         with:
           python-version: ${{ inputs.python-version }}
       - id: get_version
-        uses: scene-connect/actions/python-package-manager/get_package_version@use-project-linter-versions
+        uses: ./python-package-manager/get_package_version
         with:
           package: reorder-python-imports
           group: develop
@@ -263,7 +263,7 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - id: get_version
-        uses: scene-connect/actions/python-package-manager/get_package_version@use-project-linter-versions
+        uses: ./python-package-manager/get_package_version
         with:
           package: ruff
           group: develop
