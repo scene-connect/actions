@@ -8,11 +8,6 @@ inputs:
     default: false
     required: false
     type: boolean
-  requirements-files:
-    default: requirements.txt
-    description: Space-separated list of requirements files if using pip
-    required: false
-    type: string
 
 runs:
   using: "composite"
