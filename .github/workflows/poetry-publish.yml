@@ -93,7 +93,7 @@ jobs:
         uses: EndBug/add-and-commit@v9
         id: commit
         with:
-          add: 'pyproject.toml poetry.lock'
+          add: "pyproject.toml poetry.lock"
           message: "Auto-bump package version."
       - name: Get new version
         id: get-version
@@ -142,6 +142,8 @@ jobs:
       && !contains(needs.*.result, 'failure')
       && !contains(needs.*.result, 'cancelled')
     steps:
+      - name: Checkout
+        uses: actions/checkout@v3
       - name: Authenticate with Google Cloud
         uses: google-github-actions/auth@v1
         with:
