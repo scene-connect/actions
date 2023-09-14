@@ -160,8 +160,6 @@ jobs:
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
-      - name:
-        id: poetry-details
       - name: Get version description in Google Artifact Registry
         id: artifact_registry
         run: |
