@@ -167,9 +167,9 @@ jobs:
           echo "description<<$EOF" >> $GITHUB_OUTPUT
           echo "`gcloud artifacts versions describe \
           ${{ needs.build.outputs.version }} \
-          --package={{ needs.build.outputs.package_name }} \
-          --repository={{ inputs.repository }} \
-          --location={{ inputs.location }} \
+          --package=${{ needs.build.outputs.package_name }} \
+          --repository=${{ inputs.repository }} \
+          --location=${{ inputs.location }} \
           `" >> $GITHUB_OUTPUT
           echo "$EOF" >> $GITHUB_OUTPUT
       - name: Check version
@@ -205,4 +205,4 @@ jobs:
           package-manager: poetry
           python-version: ${{ inputs.python-version }}
       - name: Publish
-        run: poetry publish --build --repository={{ inputs.repository }} --no-interaction -vvv
+        run: poetry publish --build --repository=${{ inputs.repository }} --no-interaction -vvv
