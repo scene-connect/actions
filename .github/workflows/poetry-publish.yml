@@ -35,7 +35,7 @@ jobs:
             src/**/*
           FILES: |
             pyproject.toml
-            pyproject.lock
+            poetry.lock
 
   versions:
     # Gets the package version from the base and head branches.
