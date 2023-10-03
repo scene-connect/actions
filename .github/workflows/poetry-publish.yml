@@ -24,13 +24,12 @@ jobs:
     # Check for changes which should trigger a new build/publish
     runs-on: ubuntu-latest
     outputs:
-      src_changed: ${{ steps.diff.outputs.lines }}
+      src_changed: ${{ steps.diff.outputs.count }}
     steps:
       - uses: actions/checkout@v3
       - uses: technote-space/get-diff-action@v6
         id: diff
         with:
-          GET_FILE_DIFF: true
           PATTERNS: |
             src/**/*
           FILES: |
