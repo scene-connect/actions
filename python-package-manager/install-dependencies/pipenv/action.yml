@@ -29,5 +29,5 @@ runs:
       run: pipenv install --dev --deploy
       shell: bash
     - name: Add symlink back to local .venv
-      run: ln -s ${pipenv --where} .venv
+      run: ln -s ${pipenv --venv} .venv
       shell: bash
