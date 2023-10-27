@@ -19,10 +19,15 @@ on:
       system-dependencies:
         required: false
         type: string
-  schedule:
-    - cron: "0 0 * * 0"  # midnight every sunday
-  workflow_dispatch:
-  pull_request:   # TODO remove before merge
+    secrets:
+      PRE_COMMIT_AUTO_UPDATE_ACCESS_TOKEN:
+        description: "GitHub personal-access-token (PAT) with roles for this repo to read, run-actions and create a pull request."
+        required: true
+      GOOGLE_AUTHENTICATION_CREDENTIALS_JSON:
+        description: "Google Cloud Platform service-agent JSON credentials for accessing our Artifact Repository and installing private packages."
+        required: false
+
+
 jobs:
   autoupdate:
     runs-on: ubuntu-latest
