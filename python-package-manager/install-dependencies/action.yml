@@ -39,7 +39,7 @@ runs:
         requirements-files: ${{ inputs.requirements-files }}
     - name: Install pipenv requirements
       if: inputs.package-manager == 'pipenv'
-      uses: scene-connect/actions/python-package-manager/install-dependencies/pipenv@pre-commit-autoupdate
+      uses: scene-connect/actions/python-package-manager/install-dependencies/pipenv@v2
       with:
         python-version: ${{ inputs.python-version }}
     - name: Install poetry requirements
