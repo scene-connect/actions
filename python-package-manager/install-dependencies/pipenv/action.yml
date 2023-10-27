@@ -8,7 +8,9 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - name: Ensure virtualenv is not created in the project
+    - name: Remove local .venv
+      # setup-python only caches .local/share/virtualenvs
+      # We add a symlink back later, so the pyright can property use the correct .venv
       run: rm -rf .venv
       shell: bash
     - uses: actions/setup-python@v4
@@ -25,4 +27,7 @@ runs:
       shell: bash
     - name: Install pipenv dependencies
       run: pipenv install --dev --deploy
+      shell: bash
+    - name: Add symlink back to local .venv
+      run: ln -s ${pipenv --where} .venv
       shell: bash
