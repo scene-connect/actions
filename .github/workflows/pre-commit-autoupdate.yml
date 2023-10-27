@@ -52,10 +52,16 @@ jobs:
           system-dependencies: ${{ inputs.system-dependencies }}
 
       # Update pre-commit hooks and create a PR
-      - run: pre-commit autoupdate
-        shell: bash
-      - run: pre-commit run --all-files
-        shell: bash
+      - name: pre-commit autoupdate
+        uses: scene-connect/actions/python-package-manager/run-command@v2
+        with:
+          command: pre-commit autoupdate
+          package-manager: ${{ inputs.package-manager }}
+      - name: Check hooks still pass
+        uses: scene-connect/actions/python-package-manager/run-command@v2
+        with:
+          command: pre-commit run --all-files
+          package-manager: ${{ inputs.package-manager }}
       - uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.PRE_COMMIT_AUTO_UPDATE_ACCESS_TOKEN }}
