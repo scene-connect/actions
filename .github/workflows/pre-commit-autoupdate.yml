@@ -1,0 +1,59 @@
+name: Pre-commit auto-update
+on:
+  workflow_call:
+    inputs:
+      package-manager:
+        default: pipenv
+        description: Package manager to use (pip, pipenv or poetry)
+        required: false
+        type: string
+      python-version:
+        default: "3.11"
+        required: false
+        type: string
+      requirements-files:
+        default: requirements.txt
+        description: Space-separated list of requirements files if using pip
+        required: false
+        type: string
+      system-dependencies:
+        required: false
+        type: string
+  schedule:
+    - cron: "0 0 * * 0"  # midnight every sunday
+  workflow_dispatch:
+  pull_request:   # TODO remove before merge
+jobs:
+  autoupdate:
+    runs-on: ubuntu-latest
+    steps:
+      # Install our dependencies, so that we can run all our hooks to sanity-check
+      # that they pass. The workflow fill fail if they don't pass, and we will have
+      # to update the hooks manually.
+      - uses: actions/checkout@v3
+      - name: Authenticate with Google Cloud
+        env:
+          GOOGLE_AUTHENTICATION_CREDENTIALS_JSON: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
+        if: ${{ env.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON != '' }}
+        uses: google-github-actions/auth@v1
+        with:
+          credentials_json: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
+      - name: Install dependencies
+        uses: scene-connect/actions/python-package-manager/install-dependencies@v2
+        with:
+          package-manager: ${{ inputs.package-manager }}
+          python-version: ${{ inputs.python-version }}
+          requirements-files: ${{ inputs.requirements-files }}
+          system-dependencies: ${{ inputs.system-dependencies }}
+
+      # Update pre-commit hooks and create a PR
+      - run: pre-commit autoupdate
+        shell: bash
+      - run: pre-commit run --all-files
+        shell: bash
+      - uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.PRE_COMMIT_AUTO_UPDATE_ACCESS_TOKEN }}
+          branch: "pre-commit-autoupdate"
+          title: "pre-commit autoupdate"
+          commit-message: "pre-commit autoupdate"
