@@ -159,26 +159,10 @@ jobs:
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
-      - name: Get version description in Google Artifact Registry
+      - name: Fail if the current version exists in Google Artifact Registry
         id: artifact_registry
         run: |
-          EOF=$(dd if=/dev/urandom bs=15 count=1 status=none | base64)
-          echo "description<<$EOF" >> $GITHUB_OUTPUT
-          echo "`gcloud artifacts versions describe \
-          ${{ needs.build.outputs.version }} \
-          --package=${{ needs.build.outputs.package_name }} \
-          --repository=${{ inputs.repository }} \
-          --location=${{ inputs.location }} \
-          `" >> $GITHUB_OUTPUT
-          echo "$EOF" >> $GITHUB_OUTPUT
-      - name: Check version
-        if: contains(steps.artifact_registry.outputs.description, 'createTime')
-        uses: actions/github-script@v3
-        with:
-          script: |
-            core.setFailed(
-              "Package version ${{ needs.build.outputs.version }} already exists in the artifact registry!"
-            )
+          gcloud artifacts versions list --package=${{ needs.build.outputs.package_name }} --repository=${{ inputs.repository }} --location=${{ inputs.location }}| ( ! grep -q ${{ needs.build.outputs.version }} )
 
   publish:
     runs-on: ubuntu-latest
