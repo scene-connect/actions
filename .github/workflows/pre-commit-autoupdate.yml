@@ -64,12 +64,12 @@ jobs:
             .pre-commit-config.yaml
       - name: Check hooks still pass
         uses: scene-connect/actions/python-package-manager/run-command@v2
-        if: steps.diff.outputs.count > 0
+        if: env.GIT_DIFF
         with:
           command: pre-commit run --all-files
           package-manager: ${{ inputs.package-manager }}
       - uses: peter-evans/create-pull-request@v5
-        if: steps.diff.outputs.count > 0
+        if: env.GIT_DIFF
         with:
           token: ${{ secrets.PRE_COMMIT_AUTO_UPDATE_ACCESS_TOKEN }}
           branch: "pre-commit-autoupdate"
