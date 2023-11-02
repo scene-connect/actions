@@ -68,3 +68,4 @@ jobs:
           branch: "pre-commit-autoupdate"
           title: "pre-commit autoupdate"
           commit-message: "pre-commit autoupdate"
+          add-paths: .pre-commit-config.yaml
