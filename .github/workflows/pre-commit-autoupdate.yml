@@ -1,4 +1,4 @@
-name: Pre-commit auto-update
+name: pre-commit autoupdate
 on:
   workflow_call:
     inputs:
@@ -57,19 +57,12 @@ jobs:
         with:
           command: pre-commit autoupdate
           package-manager: ${{ inputs.package-manager }}
-      - uses: technote-space/get-diff-action@v6
-        id: diff
-        with:
-          FILES: |
-            .pre-commit-config.yaml
       - name: Check hooks still pass
         uses: scene-connect/actions/python-package-manager/run-command@v2
-        if: env.GIT_DIFF
         with:
           command: pre-commit run --all-files
           package-manager: ${{ inputs.package-manager }}
       - uses: peter-evans/create-pull-request@v5
-        if: env.GIT_DIFF
         with:
           token: ${{ secrets.PRE_COMMIT_AUTO_UPDATE_ACCESS_TOKEN }}
           branch: "pre-commit-autoupdate"
