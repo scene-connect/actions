@@ -50,8 +50,13 @@ jobs:
           python-version: ${{ inputs.python-version }}
           requirements-files: ${{ inputs.requirements-files }}
           system-dependencies: ${{ inputs.system-dependencies }}
+      - name: Add symlink to local .venv
+        # So that the pyright pre-commit hook runs with the dependencies in the venv.
+        if: inputs.package-manager == 'pipenv'
+        run: ln -s `pipenv --venv` .venv
 
       # Update pre-commit hooks and create a PR
+
       - name: pre-commit autoupdate
         uses: scene-connect/actions/python-package-manager/run-command@v2
         with:
