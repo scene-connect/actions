@@ -50,8 +50,13 @@ jobs:
           python-version: ${{ inputs.python-version }}
           requirements-files: ${{ inputs.requirements-files }}
           system-dependencies: ${{ inputs.system-dependencies }}
+      - name: Add symlink to local .venv
+        # So that the pyright pre-commit hook runs with the dependencies in the venv.
+        if: inputs.package-manager == 'pipenv'
+        run: ln -s `pipenv --venv` .venv
 
       # Update pre-commit hooks and create a PR
+
       - name: pre-commit autoupdate
         uses: scene-connect/actions/python-package-manager/run-command@v2
         with:
@@ -63,9 +68,14 @@ jobs:
           command: pre-commit run --all-files
           package-manager: ${{ inputs.package-manager }}
       - uses: peter-evans/create-pull-request@v5
+        id: pr
         with:
           token: ${{ secrets.PRE_COMMIT_AUTO_UPDATE_ACCESS_TOKEN }}
           branch: "pre-commit-autoupdate"
           title: "pre-commit autoupdate"
           commit-message: "pre-commit autoupdate"
           add-paths: .pre-commit-config.yaml
+      - name: Enable PR automerge
+        run: gh pr merge --merge --auto "${{ steps.pr.outputs.pull-request-number }}"
+        env:
+          GH_TOKEN: ${{ secrets.PRE_COMMIT_AUTO_UPDATE_ACCESS_TOKEN }}
