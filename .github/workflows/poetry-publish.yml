@@ -19,6 +19,10 @@ on:
         description: "Google Cloud Platform service-agent JSON credentials for accessing our Artifact Repository and installing private packages."
         required: false
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   diff:
     # Check for changes which should trigger a new build/publish
