@@ -20,13 +20,13 @@ on:
         required: false
         type: string
     secrets:
-      PRE_COMMIT_AUTO_UPDATE_ACCESS_TOKEN:
-        description: "GitHub personal-access-token (PAT) with roles for this repo to read, run-actions and create a pull request."
-        required: true
       GOOGLE_AUTHENTICATION_CREDENTIALS_JSON:
         description: "Google Cloud Platform service-agent JSON credentials for accessing our Artifact Repository and installing private packages."
         required: false
 
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
   autoupdate:
@@ -70,12 +70,9 @@ jobs:
       - uses: peter-evans/create-pull-request@v5
         id: pr
         with:
-          token: ${{ secrets.PRE_COMMIT_AUTO_UPDATE_ACCESS_TOKEN }}
           branch: "pre-commit-autoupdate"
           title: "pre-commit autoupdate"
-          commit-message: "pre-commit autoupdate"
+          commit-message: "[skip ci] pre-commit autoupdate"
           add-paths: .pre-commit-config.yaml
       - name: Enable PR automerge
-        run: gh pr merge --merge --auto "${{ steps.pr.outputs.pull-request-number }}"
-        env:
-          GH_TOKEN: ${{ secrets.PRE_COMMIT_AUTO_UPDATE_ACCESS_TOKEN }}
+        run: gh pr merge --squash --auto "${{ steps.pr.outputs.pull-request-number }}"
