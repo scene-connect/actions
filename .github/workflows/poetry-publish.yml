@@ -104,7 +104,7 @@ jobs:
         id: commit
         with:
           add: "pyproject.toml poetry.lock"
-          message: "Auto-bump package version."
+          message: "[skip ci] Auto-bump package version."
       - name: Get new version
         id: get-version
         run: echo "version=`poetry version --short --no-interaction`" >> $GITHUB_OUTPUT
