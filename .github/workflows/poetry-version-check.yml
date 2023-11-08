@@ -1,0 +1,85 @@
+# Simple workflow to check that the poetry version has been updated.
+# This should be run early in the CI workflow to avoid wasting time running
+# lint/tests/etc multiple times.
+name: Poetry package version check
+on:
+  workflow_call:
+    inputs:
+      repository:
+        default: "zuos-python-repo"
+        required: false
+        type: string
+      location:
+        default: "europe-north1"
+        required: false
+        type: string
+    secrets:
+      GOOGLE_AUTHENTICATION_CREDENTIALS_JSON:
+        description: "Google Cloud Platform service-agent JSON credentials for accessing our Artifact Repository and installing private packages."
+        required: false
+
+jobs:
+  diff:
+    # Check for changes which should require a package version bump
+    runs-on: ubuntu-latest
+    outputs:
+      src_changed: ${{ steps.diff.outputs.count }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: technote-space/get-diff-action@v6
+        id: diff
+        with:
+          PATTERNS: src/**/*
+          FILES: poetry.lock
+
+  versions:
+    # Gets the package version from the base and head branches.
+    runs-on: ubuntu-latest
+    needs: [diff]
+    if: needs.diff.outputs.src_changed > 0
+    outputs:
+      version-base: ${{ steps.version-base.outputs.version }}
+      version-head: ${{ steps.version-head.outputs.version }}
+      package-name: ${{ steps.package-name.outputs.package-name }}
+    steps:
+      - uses: actions/setup-python@v4
+      - uses: abatilo/actions-poetry@v2
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.base_ref }}
+      - name: Get base package version
+        id: version-base
+        run: echo "version=`poetry version --short --no-interaction`" >> $GITHUB_OUTPUT
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.head_ref }}
+      - name: Get head package version
+        id: version-head
+        run: echo "version=`poetry version --short --no-interaction`" >> $GITHUB_OUTPUT
+      - name: Output package name
+        id: package-name
+        run: echo "package-name=`poetry version --no-interaction | grep -Po '^([\w-]+)(?=\s+.*)'`" >> $GITHUB_OUTPUT
+
+  version-checks:
+    name: Version checks
+    runs-on: ubuntu-latest
+    needs: [versions]
+    steps:
+      - uses: madhead/semver-utils@v3
+        id: semver-comparison
+        with:
+          version: ${{ needs.versions.outputs.version-head }}
+          compare-to: ${{ needs.versions.outputs.version-base }}
+          lenient: false
+      - name: Head version newer than base
+        run: '[[ "${{ steps.semver-comparison.outputs.comparison-result }}" == ">" ]]'
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v1
+        env:
+          GOOGLE_AUTHENTICATION_CREDENTIALS_JSON: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
+        if: ${{ env.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON != '' }}
+        with:
+          credentials_json: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
+      - name: Head version not published yet
+        run: |
+          gcloud artifacts versions list --package=${{ needs.versions.outputs.package-name }} --repository=${{ inputs.repository }} --location=${{ inputs.location }}| grep -q ${{ needs.versions.outputs.version-head }} && echo "exists=1" >> $GITHUB_OUTPUT || echo "exists=0" >> $GITHUB_OUTPUT
