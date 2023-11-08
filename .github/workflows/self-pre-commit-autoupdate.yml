@@ -6,6 +6,6 @@ on:
 
 jobs:
   autoupdate:
-    uses: scene-connect/actions/.github/workflows/pre-commit-autoupdate.yml@v2
+    uses: scene-connect/actions/.github/workflows/pre-commit-autoupdate.yml@v3
     secrets:
       PRE_COMMIT_AUTO_UPDATE_ACCESS_TOKEN: ${{ secrets.PRE_COMMIT_AUTO_UPDATE_ACCESS_TOKEN }}

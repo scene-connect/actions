@@ -133,7 +133,7 @@ jobs:
         uses: actions/checkout@v3
         with:
           ref: ${{ needs.bump-version.outputs.commit_long_sha }}
-      - uses: scene-connect/actions/python-package-manager/install-dependencies@v2
+      - uses: scene-connect/actions/python-package-manager/install-dependencies@v3
         with:
           package-manager: poetry
           python-version: ${{ inputs.python-version }}
@@ -165,7 +165,7 @@ jobs:
         with:
           credentials_json: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
       - name: Install dependencies
-        uses: scene-connect/actions/python-package-manager/install-dependencies@v2
+        uses: scene-connect/actions/python-package-manager/install-dependencies@v3
         with:
           package-manager: poetry
           python-version: ${{ inputs.python-version }}
