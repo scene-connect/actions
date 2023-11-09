@@ -1,0 +1,43 @@
+name: Poetry build and publish
+on:
+  workflow_call:
+    inputs:
+      python-version:
+        default: "3.11"
+        required: false
+        type: string
+      repository:
+        default: "zuos-python-repo"
+        required: false
+        type: string
+      location:
+        default: "europe-north1"
+        required: false
+        type: string
+    secrets:
+      GOOGLE_AUTHENTICATION_CREDENTIALS_JSON:
+        description: "Google Cloud Platform service-agent JSON credentials for accessing our Artifact Repository and installing private packages."
+        required: false
+
+jobs:
+  build-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Authenticate with Google Cloud
+        uses: google-github-actions/auth@v1
+        env:
+          GOOGLE_AUTHENTICATION_CREDENTIALS_JSON: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
+        if: ${{ env.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON != '' }}
+        with:
+          credentials_json: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
+      - name: Install dependencies
+        uses: scene-connect/actions/python-package-manager/install-dependencies@v3
+        with:
+          package-manager: poetry
+          python-version: ${{ inputs.python-version }}
+      - name: Build
+        run: poetry build --no-interaction
+      - name: Publish
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: poetry publish --repository=${{ inputs.repository }} --no-interaction -vvv
