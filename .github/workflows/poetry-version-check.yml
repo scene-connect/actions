@@ -64,6 +64,7 @@ jobs:
     name: Version checks
     runs-on: ubuntu-latest
     needs: [versions]
+    if: needs.diff.outputs.src_changed > 0
     steps:
       - uses: madhead/semver-utils@v3
         id: semver-comparison
