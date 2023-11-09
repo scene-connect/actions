@@ -72,6 +72,7 @@ jobs:
           compare-to: ${{ needs.versions.outputs.version-base }}
           lenient: false
       - name: Head version newer than base
+        if: github.event_name != 'push' || github.ref != 'refs/heads/main' # don't run when pushing PR to main because then head==base
         run: '[[ "${{ steps.semver-comparison.outputs.comparison-result }}" == ">" ]]'
       - name: Authenticate with Google Cloud
         uses: google-github-actions/auth@v1
