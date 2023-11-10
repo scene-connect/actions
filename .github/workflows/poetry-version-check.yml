@@ -20,8 +20,12 @@ on:
 
 jobs:
   diff:
-    # Check for changes which should require a package version bump
+    # Check for changes which should require a package version bump.
+    # Should only run for pull-requests which are not by dependabot.
     runs-on: ubuntu-latest
+    if: |
+      github.event_name == 'pull_request'
+      && github.actor != 'dependabot[bot]'
     outputs:
       src_changed: ${{ steps.diff.outputs.count }}
     steps:
