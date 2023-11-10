@@ -20,7 +20,8 @@ on:
 
 jobs:
   diff:
-    # Check for changes which should require a package version bump
+    # Check for changes which should require a package version bump.
+    # Should only run for pull-requests which are not by dependabot.
     runs-on: ubuntu-latest
     outputs:
       src_changed: ${{ steps.diff.outputs.count }}
@@ -36,7 +37,10 @@ jobs:
     # Gets the package version from the base and head branches.
     runs-on: ubuntu-latest
     needs: [diff]
-    if: needs.diff.outputs.src_changed > 0
+    if: |
+      needs.diff.outputs.src_changed > 0
+      && github.event_name == 'pull_request'
+      && github.actor != 'dependabot[bot]'
     outputs:
       version-base: ${{ steps.version-base.outputs.version }}
       version-head: ${{ steps.version-head.outputs.version }}
