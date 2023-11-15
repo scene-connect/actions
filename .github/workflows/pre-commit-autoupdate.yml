@@ -80,7 +80,7 @@ jobs:
           token: ${{ secrets.PRE_COMMIT_AUTO_UPDATE_ACCESS_TOKEN }}
       - name: Enable PR automerge
         env:
-          GITHUB_TOKEN: ${{ secrets.PRE_COMMIT_AUTO_UPDATE_ACCESS_TOKEN }}
+          GH_TOKEN: ${{ secrets.PRE_COMMIT_AUTO_UPDATE_ACCESS_TOKEN }}
         run: |
           gh pr merge --squash --auto "${{ steps.pr.outputs.pull-request-number }}"
           gh pr review --approve "${{ steps.pr.outputs.pull-request-number }}"
