@@ -79,4 +79,6 @@ jobs:
           add-paths: .pre-commit-config.yaml
           token: ${{ secrets.PRE_COMMIT_AUTO_UPDATE_ACCESS_TOKEN }}
       - name: Enable PR automerge
+        env:
+          GITHUB_TOKEN: ${{ secrets.PRE_COMMIT_AUTO_UPDATE_ACCESS_TOKEN }}
         run: gh pr merge --squash --auto "${{ steps.pr.outputs.pull-request-number }}"
