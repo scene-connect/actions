@@ -81,6 +81,4 @@ jobs:
       - name: Enable PR automerge
         env:
           GH_TOKEN: ${{ secrets.PRE_COMMIT_AUTO_UPDATE_ACCESS_TOKEN }}
-        run: |
-          gh pr merge --squash --auto "${{ steps.pr.outputs.pull-request-number }}"
-          gh pr review --approve "${{ steps.pr.outputs.pull-request-number }}"
+        run: gh pr merge --squash --auto "${{ steps.pr.outputs.pull-request-number }}"
