@@ -23,6 +23,9 @@ on:
       GOOGLE_AUTHENTICATION_CREDENTIALS_JSON:
         description: "Google Cloud Platform service-agent JSON credentials for accessing our Artifact Repository and installing private packages."
         required: false
+      PRE_COMMIT_AUTO_UPDATE_ACCESS_TOKEN:
+        description: "Github Personal Access Token with access to create a PR for the repo."
+        required: true
 
 permissions:
   contents: write
@@ -74,5 +77,6 @@ jobs:
           title: "pre-commit autoupdate"
           commit-message: "[skip ci] pre-commit autoupdate"
           add-paths: .pre-commit-config.yaml
+          token: ${{ secrets.PRE_COMMIT_AUTO_UPDATE_ACCESS_TOKEN }}
       - name: Enable PR automerge
         run: gh pr merge --squash --auto "${{ steps.pr.outputs.pull-request-number }}"
