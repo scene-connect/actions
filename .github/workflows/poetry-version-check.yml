@@ -47,7 +47,7 @@ jobs:
       package-name: ${{ steps.package-name.outputs.package-name }}
     steps:
       - uses: actions/setup-python@v4
-      - uses: abatilo/actions-poetry@v2
+      - uses: abatilo/actions-poetry@v3
       - uses: actions/checkout@v3
         with:
           ref: ${{ github.base_ref }}
