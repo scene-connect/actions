@@ -45,7 +45,7 @@ jobs:
       - name: Store google auth secret file
         run: echo '${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}' |tee /tmp/google_auth_credentials.json
       - name: Login to Google Artifact Registry docker repo
-        uses: docker/login-action@v2
+        uses: docker/login-action@v3
         with:
           registry: europe-north1-docker.pkg.dev
           username: _json_key
