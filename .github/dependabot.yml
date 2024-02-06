@@ -1,0 +1,11 @@
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    reviewers:
+      - "scene-connect/dependabot-reviewers"
+    schedule:
+      day: "monday"
+      interval: "weekly"
+      time: "08:00"
+      timezone: "Europe/London"
