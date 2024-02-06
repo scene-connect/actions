@@ -70,7 +70,7 @@ jobs:
     needs: [versions]
     if: needs.diff.outputs.src_changed > 0
     steps:
-      - uses: madhead/semver-utils@v3
+      - uses: madhead/semver-utils@v4
         id: semver-comparison
         with:
           version: ${{ needs.versions.outputs.version-head }}
@@ -81,7 +81,7 @@ jobs:
         if: github.event_name == 'pull_request'
         run: '[[ "${{ steps.semver-comparison.outputs.comparison-result }}" == ">" ]]'
       - name: Authenticate with Google Cloud
-        uses: google-github-actions/auth@v1
+        uses: google-github-actions/auth@v2
         env:
           GOOGLE_AUTHENTICATION_CREDENTIALS_JSON: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
         if: ${{ env.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON != '' }}
