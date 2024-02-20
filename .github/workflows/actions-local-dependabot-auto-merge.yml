@@ -3,5 +3,7 @@ on: pull_request_target
 
 jobs:
   dependabot-auto-merge:
-    uses:
-      .dependabot-auto-merge.yml
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/workflows/dependabot-auto-merge.yml
