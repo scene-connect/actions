@@ -6,4 +6,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/workflows/dependabot-auto-merge.yml
+      - uses: ./.github/actions/dependabot-auto-merge
