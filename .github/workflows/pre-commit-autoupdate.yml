@@ -38,7 +38,7 @@ jobs:
       # Install our dependencies, so that we can run all our hooks to sanity-check
       # that they pass. The workflow fill fail if they don't pass, and we will have
       # to update the hooks manually.
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Authenticate with Google Cloud
         env:
           GOOGLE_AUTHENTICATION_CREDENTIALS_JSON: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
