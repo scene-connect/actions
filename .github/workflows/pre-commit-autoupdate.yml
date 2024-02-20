@@ -70,7 +70,7 @@ jobs:
         with:
           command: pre-commit run --all-files
           package-manager: ${{ inputs.package-manager }}
-      - uses: peter-evans/create-pull-request@v5
+      - uses: peter-evans/create-pull-request@v6
         id: pr
         with:
           branch: "pre-commit-autoupdate"
