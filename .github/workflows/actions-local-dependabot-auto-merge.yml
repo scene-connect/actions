@@ -1,0 +1,7 @@
+name: Dependabot auto-merge
+on: pull_request_target
+
+jobs:
+  dependabot-auto-merge:
+    uses:
+      .dependabot-auto-merge.yml
