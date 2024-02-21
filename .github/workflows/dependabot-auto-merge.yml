@@ -1,6 +1,12 @@
 name: Dependabot auto-merge
 on:
   workflow_call:
+    inputs:
+      merge_major_versions:
+        default: false
+        description: Auto merge on major version changes
+        required: false
+        type: boolean
 
 permissions:
   pull-requests: write
@@ -22,5 +28,5 @@ jobs:
       - name: Approve PR
         run: gh pr review --approve "$PR_URL"
       - name: Merge PR
-        if: ${{ steps.metadata.outputs.update-type != 'version-update:semver-major' }}
+        if: ${{ inputs.merge_major_versions || steps.metadata.outputs.update-type != 'version-update:semver-major' }}
         run: gh pr merge --auto --squash "$PR_URL"
