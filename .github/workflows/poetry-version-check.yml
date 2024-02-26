@@ -46,7 +46,7 @@ jobs:
       version-head: ${{ steps.version-head.outputs.version }}
       package-name: ${{ steps.package-name.outputs.package-name }}
     steps:
-      - uses: actions/setup-python@v4
+      - uses: actions/setup-python@v5
       - uses: abatilo/actions-poetry@v3
       - uses: actions/checkout@v4
         with:
