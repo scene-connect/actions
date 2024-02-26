@@ -89,7 +89,7 @@ jobs:
           # Don't need our dependency packages cache here, we're just installing one linter tool.
           python-version: ${{ inputs.python-version }}
       - id: get_version
-        uses: scene-connect/actions/python-package-manager/get_package_version@v4
+        uses: scene-connect/actions/python-package-manager/get_package_version@v5
         with:
           package: black
           group: develop
@@ -124,7 +124,7 @@ jobs:
           # Don't need our dependency packages cache here, we're just installation one linter tool.
           python-version: ${{ inputs.python-version }}
       - id: get_version
-        uses: scene-connect/actions/python-package-manager/get_package_version@v4
+        uses: scene-connect/actions/python-package-manager/get_package_version@v5
         with:
           package: flake8
           group: develop
@@ -151,14 +151,14 @@ jobs:
         with:
           credentials_json: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
       - name: Install dependencies
-        uses: scene-connect/actions/python-package-manager/install-dependencies@v4
+        uses: scene-connect/actions/python-package-manager/install-dependencies@v5
         with:
           package-manager: ${{ inputs.package-manager }}
           python-version: ${{ inputs.python-version }}
           requirements-files: ${{ inputs.requirements-files }}
           system-dependencies: ${{ inputs.system-dependencies }}
       - name: Run isort
-        uses: scene-connect/actions/python-package-manager/run-command@v4
+        uses: scene-connect/actions/python-package-manager/run-command@v5
         with:
           command: python -m isort --check-only --diff .
           package-manager: ${{ inputs.package-manager }}
@@ -176,7 +176,7 @@ jobs:
         with:
           credentials_json: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
       - name: Install dependencies
-        uses: scene-connect/actions/python-package-manager/install-dependencies@v4
+        uses: scene-connect/actions/python-package-manager/install-dependencies@v5
         with:
           package-manager: ${{ inputs.package-manager }}
           python-version: ${{ inputs.python-version }}
@@ -197,7 +197,7 @@ jobs:
           linters: mypy
           action: add
       - name: Run mypy
-        uses: scene-connect/actions/python-package-manager/run-command@v4
+        uses: scene-connect/actions/python-package-manager/run-command@v5
         with:
           command: python -m mypy --show-column-numbers
           package-manager: ${{ inputs.package-manager }}
@@ -215,14 +215,14 @@ jobs:
         with:
           credentials_json: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
       - name: Install dependencies
-        uses: scene-connect/actions/python-package-manager/install-dependencies@v4
+        uses: scene-connect/actions/python-package-manager/install-dependencies@v5
         with:
           package-manager: ${{ inputs.package-manager }}
           python-version: ${{ inputs.python-version }}
           requirements-files: ${{ inputs.requirements-files }}
           system-dependencies: ${{ inputs.system-dependencies }}
       - name: Run pyright
-        uses: scene-connect/actions/python-package-manager/run-command@v4
+        uses: scene-connect/actions/python-package-manager/run-command@v5
         with:
           command: python -m pyright
           package-manager: ${{ inputs.package-manager }}
@@ -251,7 +251,7 @@ jobs:
           # Don't need our dependency packages cache here, we're just installing one linter tool.
           python-version: ${{ inputs.python-version }}
       - id: get_version
-        uses: scene-connect/actions/python-package-manager/get_package_version@v4
+        uses: scene-connect/actions/python-package-manager/get_package_version@v5
         with:
           package: reorder-python-imports
           group: develop
@@ -268,7 +268,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - id: get_version
-        uses: scene-connect/actions/python-package-manager/get_package_version@v4
+        uses: scene-connect/actions/python-package-manager/get_package_version@v5
         with:
           package: ruff
           group: develop
