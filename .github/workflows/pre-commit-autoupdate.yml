@@ -47,7 +47,7 @@ jobs:
         with:
           credentials_json: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
       - name: Install dependencies
-        uses: scene-connect/actions/python-package-manager/install-dependencies@v4
+        uses: scene-connect/actions/python-package-manager/install-dependencies@v5
         with:
           package-manager: ${{ inputs.package-manager }}
           python-version: ${{ inputs.python-version }}
@@ -61,12 +61,12 @@ jobs:
       # Update pre-commit hooks and create a PR
 
       - name: pre-commit autoupdate
-        uses: scene-connect/actions/python-package-manager/run-command@v4
+        uses: scene-connect/actions/python-package-manager/run-command@v5
         with:
           command: pre-commit autoupdate
           package-manager: ${{ inputs.package-manager }}
       - name: Check hooks still pass
-        uses: scene-connect/actions/python-package-manager/run-command@v4
+        uses: scene-connect/actions/python-package-manager/run-command@v5
         with:
           command: pre-commit run --all-files
           package-manager: ${{ inputs.package-manager }}
