@@ -39,19 +39,10 @@ jobs:
           python-version: ${{ inputs.python-version }}
       - name: Build
         run: poetry build --no-interaction
-      # Only publish when pushing to main. But always attempt to buidl above first,
+      # Only publish when pushing to main. But always attempt to build first,
       # even if we won't publish next (i.e. PRs should build, to warn if the build fails)
-      - name: Diff
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: technote-space/get-diff-action@v6
-        id: diff
-        with:
-          PATTERNS: src/**/*
-          FILES: poetry.lock
-          FROM: github.event.before
       - name: Publish
         if: |
           github.event_name == 'push'
           && github.ref == 'refs/heads/main'
-          && env.GIT_DIFF
         run: poetry publish --repository=${{ inputs.repository }} --no-interaction -vvv
