@@ -14,6 +14,10 @@ on:
         default: "europe-north1"
         required: false
         type: string
+      publish:
+        default: true
+        required: false
+        type: boolean
     secrets:
       GOOGLE_AUTHENTICATION_CREDENTIALS_JSON:
         description: "Google Cloud Platform service-agent JSON credentials for accessing our Artifact Repository and installing private packages."
@@ -39,10 +43,6 @@ jobs:
           python-version: ${{ inputs.python-version }}
       - name: Build
         run: poetry build --no-interaction
-      # Only publish when pushing to main. But always attempt to build first,
-      # even if we won't publish next (i.e. PRs should build, to warn if the build fails)
       - name: Publish
-        if: |
-          github.event_name == 'push'
-          && github.ref == 'refs/heads/main'
+        if: inputs.publish
         run: poetry publish --repository=${{ inputs.repository }} --no-interaction -vvv
