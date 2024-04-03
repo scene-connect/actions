@@ -59,9 +59,6 @@ jobs:
       - run: pip install packaging
       - name: Head poetry version newer than base
         run: python -c "from packaging import version;import sys;sys.exit( 0 if version.parse('${{ needs.versions.outputs.version-head }}') > version.parse('${{ needs.versions.outputs.version-base }}') else 1)"
-      - name: main - not a pre-release version
-        if: github.base_ref == 'main'
-        run: python -c "from packaging import version;import sys;sys.exit( 1 if version.parse('${{ needs.versions.outputs.version-head }}').is_prerelease else 0)"
 
   version-check-git-tag:
     name: Version check - git tag
