@@ -3,7 +3,7 @@ on:
   workflow_call:
     inputs:
       python-version:
-        default: "3.11"
+        default: "3.12"
         required: false
         type: string
       repository:
