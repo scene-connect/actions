@@ -1,7 +1,7 @@
 name: Install pip dependencies
 inputs:
   python-version:
-    default: "3.11"
+    default: "3.12"
     required: false
     type: string
   requirements-files:
@@ -16,7 +16,7 @@ runs:
     - uses: actions/setup-python@v4
       with:
         cache: "pip"
-        python-version: "3.11"
+        python-version: ${{ inputs.python-version }}
     - name: Prepare Google Artifact Registry keyring
       if: env.GOOGLE_APPLICATION_CREDENTIALS
       # Install dependencies for accessing our private packages repo (keyring for authenticating to GCP Artifact Registry).
