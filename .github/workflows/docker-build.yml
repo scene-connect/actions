@@ -35,7 +35,7 @@ env:
   full_image_uri: europe-north1-docker.pkg.dev/${{ inputs.gcp-project }}/${{ inputs.image-repo-name }}/${{ inputs.image-name }}
 jobs:
   docker_build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     env:
       DOCKER_BUILDKIT: 1
     steps:
@@ -81,7 +81,7 @@ jobs:
             "google_application_credentials.json=/tmp/google_auth_credentials.json"
 
   kubernetes_deploy:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     needs: [docker_build]
     if: |
       inputs.deployment-name != ''
