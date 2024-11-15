@@ -35,10 +35,8 @@ runs:
       if: inputs.package-manager == 'poetry'
       with:
         python-version: ${{ inputs.python-version }}
-    - name: Install poetry
+    - uses: abatilo/actions-poetry@v3
       if: inputs.package-manager == 'poetry'
-      run: pipx install poetry
-      shell: bash
     - id: get_version
       run: echo "version=`$GITHUB_ACTION_PATH/get_version.sh`" >> $GITHUB_OUTPUT
       env:
