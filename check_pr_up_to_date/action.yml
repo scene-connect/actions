@@ -1,0 +1,16 @@
+name: Check PR is up to date with the base branch
+description: Useful for halting CI workflows if the PR branch needs updating.
+
+runs:
+  using: "composite"
+  steps:
+    - name: Git checkout
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - name: Check if up to date with the base
+      shell: bash
+      run: |
+        if ! git merge-base --is-ancestor ${{ github.event.pull_request.base.ref }} ${{ github.event.pull_request.head.sha }};
+        then echo "This branch is not up to date with ${{ github.event.pull_request.base.ref }}";
+        exit 1; fi
