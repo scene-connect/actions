@@ -12,13 +12,17 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - uses: actions/setup-python@v4
+    - uses: actions/setup-python@v5
       with:
-        cache: "poetry"
         python-version: ${{ inputs.python-version }}
-    - name: Install poetry
-      run: pipx install poetry
-      shell: bash
+    - uses: abatilo/actions-poetry@v3
+    - uses: actions/cache@v4
+      name: Setup cache
+      with:
+        path: ./.venv
+        key: poetry-lock-${{ hashFiles('poetry.lock') }}
+        # We always set "in-project" in poetry.toml to ensure a local .venv, as
+        # we require that for pyright and other pre-commit hooks.
     - name: Prepare Google Artifact Registry keyring
       if: env.GOOGLE_APPLICATION_CREDENTIALS
       # Install dependencies for accessing our private packages repo (keyring for authenticating to GCP Artifact Registry).
