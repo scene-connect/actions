@@ -1,7 +1,7 @@
 name: Install pipenv dependencies
 inputs:
   python-version:
-    default: "3.11"
+    default: "3.12"
     required: false
     type: string
 
@@ -13,7 +13,7 @@ runs:
         cache: "pipenv"
         python-version: ${{ inputs.python-version }}
     - name: Install pipenv
-      run: pip install pipenv
+      run: pipx install pipenv
       shell: bash
     - name: Prepare Google Artifact Registry keyring
       if: env.GOOGLE_APPLICATION_CREDENTIALS
