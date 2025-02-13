@@ -33,7 +33,7 @@ runs:
       shell: bash
     - name: Install poetry dependencies
       if: inputs.with_root == 'false' && inputs.groups != ''
-      run: poetry install --all-extras --no-interaction --no-root --with=inputs.groups
+      run: poetry install --all-extras --no-interaction --no-root --with=${{ inputs.groups }}
       shell: bash
     - name: Install poetry dependencies
       if: inputs.with_root == 'false' && inputs.groups == ''
@@ -41,7 +41,7 @@ runs:
       shell: bash
     - name: Install poetry dependencies with root
       if: inputs.with_root == 'true' && inputs.groups != ''
-      run: poetry install --all-extras --no-interaction --with=inputs.groups
+      run: poetry install --all-extras --no-interaction --with=${{ inputs.groups }}
       shell: bash
     - name: Install poetry dependencies with root
       if: inputs.with_root == 'true' && inputs.groups == ''
