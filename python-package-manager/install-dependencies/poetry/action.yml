@@ -9,7 +9,6 @@ inputs:
     required: false
     type: boolean
   groups:
-    default: ""
     required: false
     type: string
 
@@ -33,18 +32,18 @@ runs:
       run: poetry self add "keyrings-google-artifactregistry-auth@latest"
       shell: bash
     - name: Install poetry dependencies
-      if: inputs.with_root == 'false' && inputs.groups != ""
+      if: inputs.with_root == 'false' && inputs.groups != ''
       run: poetry install --all-extras --no-interaction --no-root --with=inputs.groups
       shell: bash
     - name: Install poetry dependencies
-      if: inputs.with_root == 'false' && inputs.groups == ""
+      if: inputs.with_root == 'false' && inputs.groups == ''
       run: poetry install --all-extras --no-interaction --no-root
       shell: bash
     - name: Install poetry dependencies with root
-      if: inputs.with_root == 'true' && inputs.groups != ""
+      if: inputs.with_root == 'true' && inputs.groups != ''
       run: poetry install --all-extras --no-interaction --with=input.groups
       shell: bash
     - name: Install poetry dependencies with root
-      if: inputs.with_root == 'true' && inputs.groups == ""
+      if: inputs.with_root == 'true' && inputs.groups == ''
       run: poetry install --all-extras --no-interaction
       shell: bash
