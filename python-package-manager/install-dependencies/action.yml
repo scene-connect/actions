@@ -22,6 +22,9 @@ inputs:
   system-dependencies:
     required: false
     type: string
+  groups:
+    required: false
+    type: string
 
 runs:
   using: "composite"
@@ -48,3 +51,4 @@ runs:
       with:
         with_root: ${{ inputs.with_root }}
         python-version: ${{ inputs.python-version }}
+        groups: ${{ inputs.groups }}
