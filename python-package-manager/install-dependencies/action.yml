@@ -47,7 +47,7 @@ runs:
         python-version: ${{ inputs.python-version }}
     - name: Install poetry requirements
       if: inputs.package-manager == 'poetry'
-      uses: scene-connect/actions/python-package-manager/install-dependencies/poetry@add_poetry_groups
+      uses: scene-connect/actions/python-package-manager/install-dependencies/poetry@v5
       with:
         with_root: ${{ inputs.with_root }}
         python-version: ${{ inputs.python-version }}
