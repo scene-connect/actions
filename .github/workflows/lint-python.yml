@@ -112,7 +112,7 @@ jobs:
       # Always use the latest version of django-upgrade, the point is to prepare for upgrades.
       - run: pip install django-upgrade
       - name: Run django-upgrade
-        run: git ls-files -- '*.py' | xargs django-upgrade --target-version ${{ inputs.django-version }}
+        run: git ls-files -- '*.py' | xargs django-upgrade
 
   flake8:
     if: inputs.flake8
