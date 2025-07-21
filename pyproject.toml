@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "scene-community-actions"
-version = "0.0.0"
+version = "0.0.1a0"
 description = ""
 authors = ["Howard Cox <dev.anubis@gmail.com>"]
 readme = "README.md"
