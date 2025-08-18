@@ -83,7 +83,7 @@ jobs:
     if: inputs.black
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/setup-python@v5
         with:
           # Don't need our dependency packages cache here, we're just installing one linter tool.
@@ -104,7 +104,7 @@ jobs:
     if: inputs.django-upgrade
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/setup-python@v5
         with:
           # Don't need our dependency packages cache here, we're just installing one linter tool.
@@ -118,7 +118,7 @@ jobs:
     if: inputs.flake8
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/setup-python@v5
         with:
           # Don't need our dependency packages cache here, we're just installation one linter tool.
@@ -142,7 +142,7 @@ jobs:
     if: inputs.isort
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Authenticate with Google Cloud
         env:
           GOOGLE_AUTHENTICATION_CREDENTIALS_JSON: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
@@ -167,7 +167,7 @@ jobs:
     if: inputs.mypy
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Authenticate with Google Cloud
         env:
           GOOGLE_AUTHENTICATION_CREDENTIALS_JSON: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
@@ -206,7 +206,7 @@ jobs:
     if: inputs.pyright
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Authenticate with Google Cloud
         env:
           GOOGLE_AUTHENTICATION_CREDENTIALS_JSON: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
@@ -231,7 +231,7 @@ jobs:
     if: inputs.pyupgrade
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/setup-python@v5
         with:
           # Don't need our dependency packages cache here, we're just installing one linter tool.
@@ -245,7 +245,7 @@ jobs:
     if: inputs.reorder-python-imports
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/setup-python@v5
         with:
           # Don't need our dependency packages cache here, we're just installing one linter tool.
@@ -266,7 +266,7 @@ jobs:
     if: inputs.ruff
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - id: get_version
         uses: scene-connect/actions/python-package-manager/get_package_version@v5
         with:
