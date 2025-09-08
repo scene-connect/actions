@@ -30,7 +30,7 @@ jobs:
       version-head: ${{ steps.version-head.outputs.version }}
       package-name: ${{ steps.package-name.outputs.package-name }}
     steps:
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
       - uses: abatilo/actions-poetry@v4
       - uses: actions/checkout@v5
         with:
@@ -53,7 +53,7 @@ jobs:
     needs: [versions]
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/setup-python@v5
+      - uses: actions/setup-python@v6
         with:
           cache: 'pip'
       - run: pip install packaging
