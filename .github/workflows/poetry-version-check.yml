@@ -32,13 +32,13 @@ jobs:
     steps:
       - uses: actions/setup-python@v6
       - uses: abatilo/actions-poetry@v4
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           ref: ${{ github.base_ref }}
       - name: Get base package version
         id: version-base
         run: echo "version=`poetry version --short --no-interaction`" >> $GITHUB_OUTPUT
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           ref: ${{ github.head_ref }}
       - name: Get head package version
@@ -68,7 +68,7 @@ jobs:
     runs-on: ubuntu-22.04
     needs: [versions]
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           fetch-tags: true
       - name: Check for existing tag
