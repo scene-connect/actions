@@ -1,0 +1,61 @@
+name: Install uv dependencies
+inputs:
+  python-version:
+    default: "3.12"
+    required: false
+    type: string
+  with_root:
+    default: false
+    required: false
+    type: boolean
+  groups:
+    required: false
+    type: string
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-python@v5
+      with:
+        python-version: ${{ inputs.python-version }}
+
+    - uses: astral-sh/setup-uv@v7
+      with:
+        enable-cache: true
+
+    - name: Create .venv
+      run: uv venv .venv
+      shell: bash
+
+    - uses: actions/cache@v4
+      name: Setup cache
+      with:
+        path: |
+          ./.venv
+          ./.uv
+        key: uv-lock-${{ hashFiles('uv.lock', 'pyproject.toml') }}
+
+    - name: Prepare Google Artifact Registry keyring
+      if: env.GOOGLE_APPLICATION_CREDENTIALS
+      run: uv pip install "keyrings-google-artifactregistry-auth"
+      shell: bash
+
+    - name: Install dependencies (no root, with groups)
+      if: inputs.with_root == 'false' && inputs.groups != ''
+      run: uv sync --no-install-project --extra all --group ${{ inputs.groups }}
+      shell: bash
+
+    - name: Install dependencies (no root, no groups)
+      if: inputs.with_root == 'false' && inputs.groups == ''
+      run: uv sync --no-install-project --extra all
+      shell: bash
+
+    - name: Install dependencies (with root, with groups)
+      if: inputs.with_root == 'true' && inputs.groups != ''
+      run: uv sync --extra all --group ${{ inputs.groups }}
+      shell: bash
+
+    - name: Install dependencies (with root, no groups)
+      if: inputs.with_root == 'true' && inputs.groups == ''
+      run: uv sync --extra all
+      shell: bash
