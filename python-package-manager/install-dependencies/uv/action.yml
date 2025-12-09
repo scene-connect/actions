@@ -27,16 +27,14 @@ runs:
       with:
         enable-cache: true
 
-    - name: Move directory
-      shell: bash
-      run: cd ${{ inputs.project_directory }}
-
     - name: Create .venv
       run: uv venv .venv
       shell: bash
+      working-directory: ${{ inputs.project_directory }}
 
     - uses: actions/cache@v4
       name: Setup cache
+      working-directory: ${{ inputs.project_directory }}
       with:
         path: |
           ./.venv
@@ -49,21 +47,25 @@ runs:
       shell: bash
 
     - name: Install dependencies (no root, with groups)
+      working-directory: ${{ inputs.project_directory }}
       if: inputs.with_root == 'false' && inputs.groups != ''
       run: uv sync --no-install-project --extra all --group ${{ inputs.groups }}
       shell: bash
 
     - name: Install dependencies (no root, no groups)
+      working-directory: ${{ inputs.project_directory }}
       if: inputs.with_root == 'false' && inputs.groups == ''
       run: uv sync --no-install-project --extra all
       shell: bash
 
     - name: Install dependencies (with root, with groups)
+      working-directory: ${{ inputs.project_directory }}
       if: inputs.with_root == 'true' && inputs.groups != ''
       run: uv sync --extra all --group ${{ inputs.groups }}
       shell: bash
 
     - name: Install dependencies (with root, no groups)
+      working-directory: ${{ inputs.project_directory }}
       if: inputs.with_root == 'true' && inputs.groups == ''
       run: uv sync --extra all
       shell: bash
