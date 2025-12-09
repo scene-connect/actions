@@ -1,5 +1,5 @@
 name: Check PR is up to date with the base branch
-description: Useful for halting CI workflows if the PR branch needs updating.
+description: Useful for halting CI workflows early if the PR branch needs updating.
 
 runs:
   using: "composite"
@@ -11,6 +11,18 @@ runs:
     - name: Check if up to date with the base
       shell: bash
       run: |
-        if ! git merge-base --is-ancestor `git rev-parse origin/${{ github.event.pull_request.base.ref }}` ${{ github.event.pull_request.head.sha }};
-        then echo "This branch is not up to date with ${{ github.event.pull_request.base.ref }}";
-        exit 1; fi
+        # Only run if we're in a PR.
+        if [ -z "${{ github.event.pull_request.head.sha }}" ]; then
+          echo "Non-PR event detected (${{ github.event_name }}). Bypassing check and passing."
+          exit 0
+        fi
+        # Check the PR branch is up to date with the base branch.
+        BASE_REF=${{ github.event.pull_request.base.ref }}
+        HEAD_SHA=${{ github.event.pull_request.head.sha }}
+        if ! git merge-base --is-ancestor origin/$BASE_REF $HEAD_SHA;
+        then
+          echo "::error title=PR out of date::This branch is not up to date with $BASE_REF"
+          echo "Please rebase or merge the latest changes from the base branch."
+          exit 1
+        fi
+        echo "✅ The branch is up to date with $BASE_REF."
