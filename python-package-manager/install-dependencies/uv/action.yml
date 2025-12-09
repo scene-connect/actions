@@ -11,6 +11,10 @@ inputs:
   groups:
     required: false
     type: string
+  project_directory:
+    required: false
+    type: string
+    default: .
 
 runs:
   using: "composite"
@@ -22,6 +26,9 @@ runs:
     - uses: astral-sh/setup-uv@v7
       with:
         enable-cache: true
+
+    - name: Move directory
+      run: cd ${{ inputs.project_directory }}
 
     - name: Create .venv
       run: uv venv .venv
