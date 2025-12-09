@@ -66,5 +66,5 @@ runs:
     - name: Install dependencies (with root, no groups)
       working-directory: ${{ inputs.project_directory }}
       if: inputs.with_root == 'true' && inputs.groups == ''
-      run: uv sync --extra all
+      run: uv sync #todo --extra all error if no extra
       shell: bash
