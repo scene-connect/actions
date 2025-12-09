@@ -60,7 +60,7 @@ on:
         type: string
       package-manager:
         default: pipenv
-        description: Package manager to use (pip, pipenv or poetry)
+        description: Package manager to use (pip, pipenv, poetry or uv)
         required: false
         type: string
       python-version:
@@ -89,7 +89,7 @@ jobs:
           # Don't need our dependency packages cache here, we're just installing one linter tool.
           python-version: ${{ inputs.python-version }}
       - id: get_version
-        uses: scene-connect/actions/python-package-manager/get_package_version@v5
+        uses: scene-connect/actions/python-package-manager/get_package_version@ZUS-1459-package_manager_uv
         with:
           package: black
           group: develop
