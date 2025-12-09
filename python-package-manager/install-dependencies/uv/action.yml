@@ -28,6 +28,7 @@ runs:
         enable-cache: true
 
     - name: Move directory
+      shell: bash
       run: cd ${{ inputs.project_directory }}
 
     - name: Create .venv
