@@ -25,6 +25,10 @@ inputs:
   groups:
     required: false
     type: string
+  project_directory:
+    required: false
+    type: string
+    default: .
 
 runs:
   using: "composite"
@@ -52,3 +56,11 @@ runs:
         with_root: ${{ inputs.with_root }}
         python-version: ${{ inputs.python-version }}
         groups: ${{ inputs.groups }}
+    - name: Install uv requirements
+      if: inputs.package-manager == 'uv'
+      uses: scene-connect/actions/python-package-manager/install-dependencies/uv@v5
+      with:
+        with_root: ${{ inputs.with_root }}
+        python-version: ${{ inputs.python-version }}
+        groups: ${{ inputs.groups }}
+        project_directory: ${{ inputs.project_directory }}

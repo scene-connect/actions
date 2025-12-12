@@ -10,6 +10,9 @@ then
     elif [ "$INPUT_PACKAGE_MANAGER" == "poetry" ]
     then
         poetry show --with="$INPUT_GROUP" -- "$INPUT_PACKAGE" | grep "version" | grep -o ": .*" | grep -Po $version_regex
+    elif [ "$INPUT_PACKAGE_MANAGER" == "uv" ]
+    then
+        uv pip show "$INPUT_PACKAGE" | grep "version" | grep -o ": .*" | grep -Po $version_regex
     elif [[ "$INPUT_PACKAGE_MANAGER" == "pip" ]]
     then
         cat $INPUT_REQUIREMENTS_FILE | grep "$INPUT_PACKAGE" | grep -Po "[=><~]+.*" | grep -Po $version_regex

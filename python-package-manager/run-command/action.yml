@@ -22,3 +22,6 @@ runs:
     - if: inputs.package-manager == 'poetry'
       run: poetry run ${{ inputs.command }}
       shell: bash
+    - if: inputs.package-manager == 'uv'
+      run: uv run ${{ inputs.command }}
+      shell: bash

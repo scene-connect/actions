@@ -2,7 +2,7 @@ name: Get package version
 inputs:
   package-manager:
     default: pipenv
-    description: Package manager to use (pip, pipenv or poetry)
+    description: Package manager to use (pip, pipenv, poetry or uv)
     required: false
     type: string
   package:
@@ -32,11 +32,13 @@ runs:
   using: "composite"
   steps:
     - uses: actions/setup-python@v4
-      if: inputs.package-manager == 'poetry'
+      if: ${{ inputs.package-manager == 'poetry' || inputs.package-manager == 'uv' }}
       with:
         python-version: ${{ inputs.python-version }}
     - uses: abatilo/actions-poetry@v3
       if: inputs.package-manager == 'poetry'
+    - uses: astral-sh/setup-uv@v7
+      if: inputs.package-manager == 'uv'
     - id: get_version
       run: echo "version=`$GITHUB_ACTION_PATH/get_version.sh`" >> $GITHUB_OUTPUT
       env:
