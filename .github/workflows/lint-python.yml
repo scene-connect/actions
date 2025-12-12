@@ -72,7 +72,7 @@ on:
         description: Space-separated list of requirements files if using pip
         required: false
         type: string
-      project-directory:
+      project_directory:
         required: false
         type: string
         default: .
