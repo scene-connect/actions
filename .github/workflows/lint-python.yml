@@ -72,6 +72,10 @@ on:
         description: Space-separated list of requirements files if using pip
         required: false
         type: string
+      project-directory:
+        required: false
+        type: string
+        default: .
 
     secrets:
       GOOGLE_AUTHENTICATION_CREDENTIALS_JSON:
@@ -214,6 +218,14 @@ jobs:
         uses: google-github-actions/auth@v3
         with:
           credentials_json: ${{ secrets.GOOGLE_AUTHENTICATION_CREDENTIALS_JSON }}
+      - name: Install dependencies
+        uses: scene-connect/actions/python-package-manager/install-dependencies@v5
+        with:
+          package-manager: ${{ inputs.package-manager }}
+          python-version: ${{ inputs.python-version }}
+          requirements-files: ${{ inputs.requirements-files }}
+          system-dependencies: ${{ inputs.system-dependencies }}
+          project_directory: ${{ inputs.project_directory }}
       - name: Run pyright
         uses: scene-connect/actions/python-package-manager/run-command@v5
         with:
