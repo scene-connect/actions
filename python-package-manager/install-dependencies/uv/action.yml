@@ -27,6 +27,11 @@ runs:
       with:
         enable-cache: true
 
+    - name: Create uv environment
+      working-directory: ${{ inputs.project_directory }}
+      run: uv venv
+      shell: bash
+
     - uses: actions/cache@v4
       name: Setup cache
       with:
