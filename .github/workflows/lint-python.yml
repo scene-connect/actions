@@ -194,7 +194,7 @@ jobs:
         run: cp ${{ inputs.mypy-dot-env }} .env
       - name: Load mypy cache
         id: mypy-cache
-        uses: actions/cache@v4
+        uses: actions/cache@v5
         with:
           path: .mypy_cache
           key: mypy-${{ runner.os }}
