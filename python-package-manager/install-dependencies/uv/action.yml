@@ -25,7 +25,7 @@ runs:
 
     - name: Create uv environment
       working-directory: ${{ inputs.project_directory }}
-      run: uv venv --python-preference only-managed
+      run: uv venv
       shell: bash
 
     - uses: actions/cache@v4

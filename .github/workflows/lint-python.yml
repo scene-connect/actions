@@ -162,10 +162,11 @@ jobs:
           requirements-files: ${{ inputs.requirements-files }}
           system-dependencies: ${{ inputs.system-dependencies }}
       - name: Run isort
-        uses: scene-connect/actions/python-package-manager/run-command@v5
+        uses: scene-connect/actions/python-package-manager/run-command@bugfix_uv_package_manager
         with:
           command: python -m isort --check-only --diff .
           package-manager: ${{ inputs.package-manager }}
+          project_directory: ${{ inputs.project_directory }}
 
   mypy:
     if: inputs.mypy
@@ -201,10 +202,11 @@ jobs:
           linters: mypy
           action: add
       - name: Run mypy
-        uses: scene-connect/actions/python-package-manager/run-command@v5
+        uses: scene-connect/actions/python-package-manager/run-command@bugfix_uv_package_manager
         with:
           command: python -m mypy --show-column-numbers
           package-manager: ${{ inputs.package-manager }}
+          project_directory: ${{ inputs.project_directory }}
 
   pyright:
     if: inputs.pyright
@@ -229,7 +231,6 @@ jobs:
       - name: Run pyright
         uses: scene-connect/actions/python-package-manager/run-command@bugfix_uv_package_manager
         with:
-          module: pyright
           command: python -m pyright
           package-manager: ${{ inputs.package-manager }}
           project_directory: ${{ inputs.project_directory }}

@@ -4,10 +4,6 @@ inputs:
     required: true
     description: The command to run inside the virtual environment.
     type: string
-  module:
-    required: false
-    description: The module to run inside the virtual environment (uv-only).
-    type: string
   package-manager:
     default: pipenv
     description: Package manager to use (pip, pipenv, poetry or uv)
@@ -31,6 +27,6 @@ runs:
       run: poetry run ${{ inputs.command }}
       shell: bash
     - if: inputs.package-manager == 'uv'
-      run: uv run -- python -m ${{ inputs.module }}
+      run: uv run ${{ inputs.command }}
       shell: bash
       working-directory: ${{ inputs.project_directory }}
