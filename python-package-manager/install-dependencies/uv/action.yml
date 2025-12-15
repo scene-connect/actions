@@ -24,6 +24,7 @@ runs:
         python-version: ${{ inputs.python-version }}
 
     - uses: astral-sh/setup-uv@v7
+      working-directory: ${{ inputs.project_directory }}
       with:
         enable-cache: true
 
