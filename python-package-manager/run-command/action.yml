@@ -27,5 +27,5 @@ runs:
       run: poetry run ${{ inputs.command }}
       shell: bash
     - if: inputs.package-manager == 'uv'
-      run: uv run ${{ inputs.module }}
+      run: uv run -- python -m ${{ inputs.module }}
       shell: bash
