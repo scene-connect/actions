@@ -58,7 +58,7 @@ runs:
         groups: ${{ inputs.groups }}
     - name: Install uv requirements
       if: inputs.package-manager == 'uv'
-      uses: scene-connect/actions/python-package-manager/install-dependencies/uv@v5
+      uses: scene-connect/actions/python-package-manager/install-dependencies/uv@bugfix_uv_package_manager
       with:
         with_root: ${{ inputs.with_root }}
         python-version: ${{ inputs.python-version }}
