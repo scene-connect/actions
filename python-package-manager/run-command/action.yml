@@ -33,5 +33,4 @@ runs:
     - if: inputs.package-manager == 'uv'
       run: uv run -- python -m ${{ inputs.module }}
       shell: bash
-      with:
-        project_directory: ${{ inputs.project_directory }}
+      working-directory: ${{ inputs.project_directory }}
