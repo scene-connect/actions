@@ -161,6 +161,7 @@ jobs:
           python-version: ${{ inputs.python-version }}
           requirements-files: ${{ inputs.requirements-files }}
           system-dependencies: ${{ inputs.system-dependencies }}
+          project_directory: ${{ inputs.project_directory }}
       - name: Run isort
         uses: scene-connect/actions/python-package-manager/run-command@bugfix_uv_package_manager
         with:
@@ -187,6 +188,7 @@ jobs:
           python-version: ${{ inputs.python-version }}
           requirements-files: ${{ inputs.requirements-files }}
           system-dependencies: ${{ inputs.system-dependencies }}
+          project_directory: ${{ inputs.project_directory }}
       - name: Set up environment
         if: ${{ inputs.mypy-dot-env }}
         run: cp ${{ inputs.mypy-dot-env }} .env
