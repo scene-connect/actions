@@ -72,7 +72,7 @@ on:
         description: Space-separated list of requirements files if using pip
         required: false
         type: string
-      project_directory:
+      project-directory:
         required: false
         type: string
         default: .
@@ -161,13 +161,13 @@ jobs:
           python-version: ${{ inputs.python-version }}
           requirements-files: ${{ inputs.requirements-files }}
           system-dependencies: ${{ inputs.system-dependencies }}
-          project_directory: ${{ inputs.project_directory }}
+          project-directory: ${{ inputs.project-directory }}
       - name: Run isort
         uses: scene-connect/actions/python-package-manager/run-command@bugfix_uv_package_manager
         with:
           command: python -m isort --check-only --diff .
           package-manager: ${{ inputs.package-manager }}
-          project_directory: ${{ inputs.project_directory }}
+          project-directory: ${{ inputs.project-directory }}
 
   mypy:
     if: inputs.mypy
@@ -188,7 +188,7 @@ jobs:
           python-version: ${{ inputs.python-version }}
           requirements-files: ${{ inputs.requirements-files }}
           system-dependencies: ${{ inputs.system-dependencies }}
-          project_directory: ${{ inputs.project_directory }}
+          project-directory: ${{ inputs.project-directory }}
       - name: Set up environment
         if: ${{ inputs.mypy-dot-env }}
         run: cp ${{ inputs.mypy-dot-env }} .env
@@ -208,7 +208,7 @@ jobs:
         with:
           command: python -m mypy --show-column-numbers
           package-manager: ${{ inputs.package-manager }}
-          project_directory: ${{ inputs.project_directory }}
+          project-directory: ${{ inputs.project-directory }}
 
   pyright:
     if: inputs.pyright
@@ -229,13 +229,13 @@ jobs:
           python-version: ${{ inputs.python-version }}
           requirements-files: ${{ inputs.requirements-files }}
           system-dependencies: ${{ inputs.system-dependencies }}
-          project_directory: ${{ inputs.project_directory }}
+          project-directory: ${{ inputs.project-directory }}
       - name: Run pyright
         uses: scene-connect/actions/python-package-manager/run-command@bugfix_uv_package_manager
         with:
           command: python -m pyright
           package-manager: ${{ inputs.package-manager }}
-          project_directory: ${{ inputs.project_directory }}
+          project-directory: ${{ inputs.project-directory }}
 
   pyupgrade:
     if: inputs.pyupgrade

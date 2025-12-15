@@ -11,7 +11,7 @@ inputs:
   groups:
     required: false
     type: string
-  project_directory:
+  project-directory:
     required: false
     type: string
     default: .
@@ -24,7 +24,7 @@ runs:
         enable-cache: true
 
     - name: Create .venv
-      working-directory: ${{ inputs.project_directory }}
+      working-directory: ${{ inputs.project-directory }}
       run: uv venv .venv
       shell: bash
 
@@ -32,7 +32,7 @@ runs:
       name: Setup cache
       with:
         path: |
-          ${{ inputs.project_directory }}/.venv
+          ${{ inputs.project-directory }}/.venv
         key: uv-lock-${{ hashFiles('uv.lock', 'pyproject.toml') }}
 
     - name: Prepare Google Artifact Registry keyring
@@ -41,25 +41,25 @@ runs:
       shell: bash
 
     - name: Install dependencies (no root, with groups)
-      working-directory: ${{ inputs.project_directory }}
+      working-directory: ${{ inputs.project-directory }}
       if: inputs.with_root == 'false' && inputs.groups != ''
       run: uv sync --no-install-project --all-extras --group ${{ inputs.groups }}
       shell: bash
 
     - name: Install dependencies (no root, no groups)
-      working-directory: ${{ inputs.project_directory }}
+      working-directory: ${{ inputs.project-directory }}
       if: inputs.with_root == 'false' && inputs.groups == ''
       run: uv sync --no-install-project --all-extras
       shell: bash
 
     - name: Install dependencies (with root, with groups)
-      working-directory: ${{ inputs.project_directory }}
+      working-directory: ${{ inputs.project-directory }}
       if: inputs.with_root == 'true' && inputs.groups != ''
       run: uv sync --all-extras --group ${{ inputs.groups }}
       shell: bash
 
     - name: Install dependencies (with root, no groups)
-      working-directory: ${{ inputs.project_directory }}
+      working-directory: ${{ inputs.project-directory }}
       if: inputs.with_root == 'true' && inputs.groups == ''
       run: uv sync --all-extras
       shell: bash

@@ -9,7 +9,7 @@ inputs:
     description: Package manager to use (pip, pipenv, poetry or uv)
     required: false
     type: string
-  project_directory:
+  project-directory:
     required: false
     type: string
     default: .
@@ -29,4 +29,4 @@ runs:
     - if: inputs.package-manager == 'uv'
       run: uv run ${{ inputs.command }}
       shell: bash
-      working-directory: ${{ inputs.project_directory }}
+      working-directory: ${{ inputs.project-directory }}
