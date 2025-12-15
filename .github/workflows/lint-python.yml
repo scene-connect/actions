@@ -227,8 +227,9 @@ jobs:
           system-dependencies: ${{ inputs.system-dependencies }}
           project_directory: ${{ inputs.project_directory }}
       - name: Run pyright
-        uses: scene-connect/actions/python-package-manager/run-command@v5
+        uses: scene-connect/actions/python-package-manager/run-command@bugfix_uv_package_manager
         with:
+          module: pyright
           command: python -m pyright
           package-manager: ${{ inputs.package-manager }}
 

@@ -49,7 +49,7 @@ runs:
     - name: Install dependencies (no root, no groups)
       working-directory: ${{ inputs.project_directory }}
       if: inputs.with_root == 'false' && inputs.groups == ''
-      run: uv sync --no-install-project --all-extras --dev
+      run: uv sync --no-install-project --all-extras
       shell: bash
 
     - name: Install dependencies (with root, with groups)
@@ -61,5 +61,5 @@ runs:
     - name: Install dependencies (with root, no groups)
       working-directory: ${{ inputs.project_directory }}
       if: inputs.with_root == 'true' && inputs.groups == ''
-      run: uv sync --all-extras --dev
+      run: uv sync --all-extras
       shell: bash
