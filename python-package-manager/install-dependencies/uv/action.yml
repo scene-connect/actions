@@ -11,7 +11,7 @@ inputs:
   groups:
     required: false
     type: string
-  project_directory:
+  project-directory:
     required: false
     type: string
     default: .
@@ -19,25 +19,20 @@ inputs:
 runs:
   using: "composite"
   steps:
-    - uses: actions/setup-python@v5
-      with:
-        python-version: ${{ inputs.python-version }}
-
     - uses: astral-sh/setup-uv@v7
       with:
         enable-cache: true
 
     - name: Create .venv
+      working-directory: ${{ inputs.project-directory }}
       run: uv venv .venv
       shell: bash
-      working-directory: ${{ inputs.project_directory }}
 
     - uses: actions/cache@v4
       name: Setup cache
       with:
         path: |
-          ./.venv
-          ./.uv
+          ${{ inputs.project-directory }}/.venv
         key: uv-lock-${{ hashFiles('uv.lock', 'pyproject.toml') }}
 
     - name: Prepare Google Artifact Registry keyring
@@ -46,25 +41,25 @@ runs:
       shell: bash
 
     - name: Install dependencies (no root, with groups)
-      working-directory: ${{ inputs.project_directory }}
+      working-directory: ${{ inputs.project-directory }}
       if: inputs.with_root == 'false' && inputs.groups != ''
       run: uv sync --no-install-project --all-extras --group ${{ inputs.groups }}
       shell: bash
 
     - name: Install dependencies (no root, no groups)
-      working-directory: ${{ inputs.project_directory }}
+      working-directory: ${{ inputs.project-directory }}
       if: inputs.with_root == 'false' && inputs.groups == ''
       run: uv sync --no-install-project --all-extras
       shell: bash
 
     - name: Install dependencies (with root, with groups)
-      working-directory: ${{ inputs.project_directory }}
+      working-directory: ${{ inputs.project-directory }}
       if: inputs.with_root == 'true' && inputs.groups != ''
       run: uv sync --all-extras --group ${{ inputs.groups }}
       shell: bash
 
     - name: Install dependencies (with root, no groups)
-      working-directory: ${{ inputs.project_directory }}
+      working-directory: ${{ inputs.project-directory }}
       if: inputs.with_root == 'true' && inputs.groups == ''
       run: uv sync --all-extras
       shell: bash

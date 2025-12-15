@@ -6,9 +6,13 @@ inputs:
     type: string
   package-manager:
     default: pipenv
-    description: Package manager to use (pip, pipenv or poetry)
+    description: Package manager to use (pip, pipenv, poetry or uv)
     required: false
     type: string
+  project-directory:
+    required: false
+    type: string
+    default: .
 
 runs:
   using: "composite"
@@ -25,3 +29,4 @@ runs:
     - if: inputs.package-manager == 'uv'
       run: uv run ${{ inputs.command }}
       shell: bash
+      working-directory: ${{ inputs.project-directory }}
