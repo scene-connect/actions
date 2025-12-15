@@ -33,8 +33,7 @@ runs:
       working-directory: ${{ inputs.project_directory }}
       with:
         path: |
-          ./.venv
-          ./.uv
+          ${{ inputs.project_directory }}/.venv
         key: uv-lock-${{ hashFiles('uv.lock', 'pyproject.toml') }}
 
     - name: Prepare Google Artifact Registry keyring
