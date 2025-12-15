@@ -30,7 +30,6 @@ runs:
 
     - uses: actions/cache@v4
       name: Setup cache
-      working-directory: ${{ inputs.project_directory }}
       with:
         path: |
           ${{ inputs.project_directory }}/.venv
