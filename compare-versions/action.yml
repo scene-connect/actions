@@ -1,0 +1,25 @@
+name: Install dependencies
+inputs:
+  package-manager:
+    default: pipenv
+    description: Package manager to use (pip, pipenv or poetry)
+    required: false
+    type: string
+  project-directory:
+    required: false
+    type: string
+    default: .
+
+runs:
+  using: "composite"
+  steps:
+    - name: Compare Poetry versions
+      if: inputs.package-manager == 'poetry'
+      uses: scene-connect/actions/compare-versions/poetry@v6
+      with:
+        project-directory: ${{ inputs.project-directory }}
+    - name: Compare uv versions
+      if: inputs.package-manager == 'uv'
+      uses: scene-connect/actions/compare-versions/uv@v6
+      with:
+        project-directory: ${{ inputs.project-directory }}

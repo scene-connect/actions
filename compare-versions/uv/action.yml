@@ -1,0 +1,48 @@
+name: Compare versions between head and base branches
+
+inputs:
+  project-directory:
+    required: false
+    type: string
+    default: .
+
+outputs:
+  version-base:
+    description: uv version of the base branch
+    value: ${{ steps.version-base.outputs.version }}
+  version-head:
+    description: uv version of the head branch
+    value: ${{ steps.version-head.outputs.version }}
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-python@v6
+    - uses: abatilo/actions-poetry@v3
+    - uses: actions/checkout@v6
+      with:
+        ref: ${{ github.base_ref }}
+    - name: Get base package version
+      id: version-base
+      shell: bash
+      working-directory: inputs.project-directory
+      run: echo "version=`uv version --short`" >> $GITHUB_OUTPUT
+    - uses: actions/checkout@v6
+      with:
+        ref: ${{ github.head_ref }}
+    - name: Get head package version
+      id: version-head
+      shell: bash
+      working-directory: inputs.project-directory
+      run: echo "version=`uv version --short`" >> $GITHUB_OUTPUT
+
+    # -------------------------------------------------------------------------
+    #    Version bump check
+    # -------------------------------------------------------------------------
+    - name: Install packaging
+      shell: bash
+      run: pip install packaging
+
+    - name: Head uv version must be newer than base
+      shell: bash
+      run: python -c "from packaging import version;import sys;sys.exit( 0 if version.parse('${{ outputs.version-head }}') > version.parse('${{ outputs.version-base }}') else 1)"
