@@ -1,0 +1,35 @@
+name: Compare versions between head and base branches
+
+inputs:
+  project-directory:
+    required: false
+    type: string
+    default: .
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/setup-python@v6
+    - uses: abatilo/actions-poetry@v4
+    - uses: actions/checkout@v6
+      with:
+        ref: ${{ github.base_ref }}
+    - name: Get base package version
+      id: version_base
+      shell: bash
+      working-directory: ${{ inputs.project-directory }}
+      run: echo "version=$(uv version --short)" >> $GITHUB_OUTPUT
+    - uses: actions/checkout@v6
+      with:
+        ref: ${{ github.head_ref }}
+    - name: Get head package version
+      id: version_head
+      shell: bash
+      working-directory: ${{ inputs.project-directory }}
+      run: echo "version=$(uv version --short)" >> $GITHUB_OUTPUT
+
+    # -------------------------------------------------------------------------
+    #    Version bump check
+    # -------------------------------------------------------------------------
+    - run: bash $GITHUB_ACTION_PATH/../assert_version_bump.sh ${{ steps.version_head.outputs.version }} ${{ steps.version_base.outputs.version }}
+      shell: bash
