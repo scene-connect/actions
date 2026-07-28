@@ -12,7 +12,7 @@ then
         poetry show --with="$INPUT_GROUP" -- "$INPUT_PACKAGE" | grep -i "version" | grep -o ": .*" | grep -Po $version_regex
     elif [ "$INPUT_PACKAGE_MANAGER" == "uv" ]
     then
-        uv pip show "$INPUT_PACKAGE" | grep -i "version" | grep -o ": .*" | grep -Po $version_regex
+        uv tree --quiet --package "$INPUT_PACKAGE" | grep -Po "$INPUT_PACKAGE v?\K[0-9a-zA-Z\.-]+"
     elif [[ "$INPUT_PACKAGE_MANAGER" == "pip" ]]
     then
         cat $INPUT_REQUIREMENTS_FILE | grep "$INPUT_PACKAGE" | grep -Po "[=><~]+.*" | grep -Po $version_regex
