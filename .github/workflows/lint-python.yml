@@ -117,6 +117,7 @@ jobs:
       - run: pip install django-upgrade
       - name: Run django-upgrade
         run: git ls-files -- '*.py' | xargs django-upgrade --target-version ${{ inputs.django-version }}
+        working-directory: ${{ inputs.project-directory }}
 
   flake8:
     if: inputs.flake8
@@ -250,6 +251,7 @@ jobs:
       - run: pip install pyupgrade
       - name: Run pyupgrade
         run: git ls-files -- '*.py' | xargs pyupgrade --py`echo ${{ inputs.python-version }} | tr -d .`-plus
+        working-directory: ${{ inputs.project-directory }}
 
   reorder-python-imports:
     if: inputs.reorder-python-imports
@@ -268,9 +270,11 @@ jobs:
           package-manager: ${{ inputs.package-manager }}
           python-version: ${{ inputs.python-version }}
           requirements-files: ${{ inputs.requirements-files }}
+          project-directory: ${{ inputs.project-directory }}
       - run: pip install reorder-python-imports==${{ steps.get_version.outputs.version }}
       - name: Run reorder-python-imports
         run: git ls-files -- '*.py' | xargs reorder-python-imports --py`echo ${{ inputs.python-version }} | tr -d .`-plus
+        working-directory: ${{ inputs.project-directory }}
 
   ruff:
     if: inputs.ruff
@@ -285,6 +289,8 @@ jobs:
           package-manager: ${{ inputs.package-manager }}
           python-version: ${{ inputs.python-version }}
           requirements-files: ${{ inputs.requirements-files }}
+          project-directory: ${{ inputs.project-directory }}
       - uses: chartboost/ruff-action@v1
         with:
           version: ${{ steps.get_version.outputs.version }}
+          src: ${{ inputs.project-directory }}

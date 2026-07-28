@@ -23,6 +23,11 @@ inputs:
       description: "Space-separated list of requirements files if using pip"
       required: false
       type: string
+  project-directory:
+    required: false
+    type: string
+    default: .
+
 outputs:
   version:
     description: "The package version, if found"
@@ -47,3 +52,4 @@ runs:
         INPUT_PACKAGE_MANAGER: ${{ inputs.package-manager }}
         INPUT_REQUIREMENTS_FILES: ${{ inputs.requirements-files }}
       shell: bash
+      working-directory: ${{ inputs.project-directory }}
