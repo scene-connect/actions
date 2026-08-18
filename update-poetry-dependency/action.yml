@@ -1,0 +1,23 @@
+name: 'Update Poetry Dependency Version'
+description: 'Updates a Poetry dependency version in place, preserving extras/sources/metadata'
+inputs:
+  package:
+    description: 'Package name'
+    required: true
+  version:
+    description: 'New version to set'
+    required: true
+  pyproject-path:
+    description: 'Path to pyproject.toml'
+    required: false
+    default: 'pyproject.toml'
+runs:
+  using: 'composite'
+  steps:
+    - name: Install tomlkit
+      shell: bash
+      run: pip install tomlkit --quiet
+
+    - name: Update dependency
+      shell: bash
+      run: python "${{ github.action_path }}/update_dependency_version.py" "${{ inputs.pyproject-path }}" "${{ inputs.package }}" "${{ inputs.version }}"
