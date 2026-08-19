@@ -184,6 +184,18 @@ test = ["build[virtualenv] (>=1.0.3)", "filelock (>=3.4.0)", "ini2toml[lite] (>=
 type = ["importlib_metadata (>=7.0.2) ; python_version < \"3.10\"", "jaraco.develop (>=7.21) ; sys_platform != \"cygwin\"", "mypy (==1.18.*)", "pytest-mypy (>=1.0.1) ; platform_python_implementation != \"PyPy\""]
 
 [[package]]
+name = "tomlkit"
+version = "0.15.1"
+description = "Style preserving TOML library"
+optional = false
+python-versions = ">=3.9"
+groups = ["main"]
+files = [
+    {file = "tomlkit-0.15.1-py3-none-any.whl", hash = "sha256:177a05aece5a8ca5266fd3c448abb47b8d352f09d477d3ca8332db4d89b24304"},
+    {file = "tomlkit-0.15.1.tar.gz", hash = "sha256:e25bbf38843005246210a12982776f27f99cb9be67160e14434d0c0d21ee1e97"},
+]
+
+[[package]]
 name = "virtualenv"
 version = "20.36.1"
 description = "Virtual Python Environment builder"
@@ -207,4 +219,4 @@ test = ["covdefaults (>=2.3)", "coverage (>=7.2.7)", "coverage-enable-subprocess
 [metadata]
 lock-version = "2.1"
 python-versions = "^3.12"
-content-hash = "d547709a70fc4b3e2bef05272b04fd981e5f6f6746fa24764851d2c8a1172473"
+content-hash = "f4ad50bab024123b1de094c30b86e928dc2610d4792e803d2814925633ffc65c"

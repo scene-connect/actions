@@ -1,0 +1,30 @@
+name: 'Update Dependency Version'
+description: 'Updates a dependency version in pyproject.toml for the given package manager, preserving extras/sources/metadata where supported'
+inputs:
+  package-manager:
+    default: 'poetry'
+    required: false
+  package:
+    required: true
+  version:
+    required: true
+  pyproject-path:
+    default: 'pyproject.toml'
+    required: false
+
+runs:
+  using: 'composite'
+  steps:
+    - if: inputs.package-manager == 'poetry'
+      uses: ./update-dependency/poetry
+      with:
+        package: ${{ inputs.package }}
+        version: ${{ inputs.version }}
+        pyproject-path: ${{ inputs.pyproject-path }}
+
+    - if: inputs.package-manager == 'uv'
+      uses: ./update-dependency/uv
+      with:
+        package: ${{ inputs.package }}
+        version: ${{ inputs.version }}
+        pyproject-path: ${{ inputs.pyproject-path }}

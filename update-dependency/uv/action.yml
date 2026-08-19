@@ -1,0 +1,18 @@
+name: 'Update UV Dependency Version'
+description: 'Updates a UV dependency version (Not yet implemented)'
+inputs:
+  package:
+    required: true
+  version:
+    required: true
+  pyproject-path:
+    required: false
+    default: 'pyproject.toml'
+
+runs:
+  using: 'composite'
+  steps:
+    - shell: bash
+      run: |
+        echo "Error: UV dependency update logic is not configured yet." >&2
+        exit 1
