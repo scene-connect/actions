@@ -16,14 +16,14 @@ runs:
   using: 'composite'
   steps:
     - if: inputs.package-manager == 'poetry'
-      uses: ./update-dependency/poetry
+      uses: scene-connect/actions/update-dependency/poetry@v5
       with:
         package: ${{ inputs.package }}
         version: ${{ inputs.version }}
         pyproject-path: ${{ inputs.pyproject-path }}
 
     - if: inputs.package-manager == 'uv'
-      uses: ./update-dependency/uv
+      uses: scene-connect/actions/update-dependency/uv@v5
       with:
         package: ${{ inputs.package }}
         version: ${{ inputs.version }}
